@@ -132,7 +132,6 @@ let filterTableData = computed(() => {
         (data) =>
             !search.value ||
             nullObjectHandler(data.stationCode).toString().includes(search.value) ||
-            nullObjectHandler(data.stationCode).toString().includes(search.value) ||
             nullObjectHandler(data.stationName).toString().includes(search.value) ||
             nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
             nullObjectHandler(data.setDate).toString().includes(search.value) ||
