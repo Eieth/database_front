@@ -31,6 +31,15 @@
           </template>
         </el-menu-item>
 
+        <el-menu-item index="3">
+          <template #title>
+            <el-icon>
+              <User />
+            </el-icon>
+            <span>相关信息</span>
+          </template>
+        </el-menu-item>
+
         
 
       </el-menu>
@@ -57,7 +66,7 @@ let handleSelect = (idx) => {
   } else if (idx === '1-7') {
     router.push({ name:'SoilMoistureStation'});
   } else if (idx === '1-8') {
-    router.push({ name:'HydrologicalChanges' });
+    router.push({ name:'HistoricalChanges' });
   } else if (idx === '2') {
     router.push({ name: 'UserControl' });
   } else if (idx === '3') {

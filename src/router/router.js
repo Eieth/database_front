@@ -9,16 +9,19 @@ import HistoricalChanges from '@/components/HistoricalChanges.vue';
 import HydrologicalStations from '@/components/HydrologicalStations.vue';
 import RainfallStations from '@/components/RainfallStations.vue';
 import SoilMoistureStation from '@/components/SoilMoistureStation.vue';
+import StationBasicInfo from '@/components/StationBasicInfo.vue';
+import WaterLevelStations from '@/components/WaterLevelStations.vue';
+import WaterQualityStations from '@/components/WaterQualityStations.vue';
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: 'login',
+            path: '/login',
             name: 'Login',
             component: Login,
         }, {
-            path: 'manage',
+            path: '/manage',
             name: 'Manage',
             component: Manage,
             children: [{
@@ -59,9 +62,9 @@ const router = createRouter({
                         name: 'SoilMoistureStation',
                         component: SoilMoistureStation,
                     }, {
-                        path: 'hydrologicalChanges',
-                        name: 'HydrologicalChanges',
-                        component: HydrologicalChanges,
+                        path: 'historicalChanges',
+                        name: 'HistoricalChanges',
+                        component: HistoricalChanges,
                     },
                 ]
             }, {
