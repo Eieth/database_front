@@ -7,15 +7,15 @@
     </div>
 
     <div>
-        <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">水质站表</p>
+        <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">动态信息表</p>
     </div>
     <el-table :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh" :table-layout="auto"
         v-if="dataFetched" @selection-change="handleSelectionChange">
-        <el-table-column label="测站名称" prop="stationName" />
+        <el-table-column type="selection" />
         <el-table-column label="测站编码" prop="stationCode" />
-        <el-table-column label="断面名称" prop="sectionName" />
-        <el-table-column label="一级水功能区名称" prop="primaryZoneName" />
-        <el-table-column label="二级水功能区名称" prop="secondaryZoneName" />
+        <el-table-column label="测站名称" prop="stationName" />
+        <el-table-column label="集水面积" prop="square" />
+
     </el-table>
     <el-dialog v-model="deleteDialogVisible" title="删除" width="30%">
         <span>将删除该行数据，无法恢复，请注意！！！</span>
@@ -30,22 +30,15 @@
     </el-dialog>
     <el-dialog v-model="dialogVisible" :title="getTitle()" width="30%" :before-close="leave">
         <el-form>
-            <el-form-item label="测站名称" prop="stationName">
-                <el-input v-model="WaterQualityStations.stationName" />
-            </el-form-item>
             <el-form-item label="测站编码" prop="stationCode">
-                <el-input v-model="WaterQualityStations.stationCode" />
+                <el-input v-model="DynamicInfo.stationCode" />
             </el-form-item>
-            <el-form-item label="断面名称" prop="sectionName">
-                <el-input v-model="WaterQualityStations.sectionName" />
+            <el-form-item label="测站名称" prop="stationName">
+                    <el-input v-model="DynamicInfo.stationName" />
             </el-form-item>
-            <el-form-item label="一级水功能区名称" prop="primaryZoneName">
-                <el-input v-model="WaterQualityStations.primaryZoneName" />
+            <el-form-item label="集水面积" prop="square">
+                    <el-input v-model="DynamicInfo.square" />
             </el-form-item>
-            <el-form-item label="二级水功能区名称" prop="secondaryZoneName">
-                <el-input v-model="WaterQualityStations.secondaryZoneName" />
-            </el-form-item>
-
         </el-form>
         <template #footer>
             <span class="dialog-footer">
@@ -70,16 +63,14 @@ let isUpdate = ref(false);
 let dialogVisible = ref(false)
 let deleteDialogVisible = ref(false)
 let selection = ref([]);
-const WaterQualityStations = ref({
-    stationName: '',
+const DynamicInfo = ref({
     stationCode: '',
-    sectionName: '', 
-    primaryZoneName: '', 
-    secondaryZoneName: '', 
+    stationName: '',
+    square: ''
 })
 
 
-axios.post(baseURL + '/database/get' + 'WaterQualityStations', {}, {
+axios.post(baseURL + '/database/get' + 'DynamicInfo', {}, {
     headers: {
         token: localStorage.getItem('token')
     }
@@ -101,11 +92,9 @@ let filterTableData = computed(() => {
     return tableData.value.filter(
         (data) =>
             !search.value ||
-            nullObjectHandler(data.stationName).toString().includes(search.value) ||
             nullObjectHandler(data.stationCode).toString().includes(search.value) ||
-            nullObjectHandler(data.sectionName).toString().includes(search.value) ||
-            nullObjectHandler(data.primaryZoneName).toString().includes(search.value) ||
-            nullObjectHandler(data.secondaryZoneName).toString().includes(search.value)
+            nullObjectHandler(data.stationName).toString().includes(search.value) ||
+            nullObjectHandler(data.square).toString().includes(search.value)
     )
 })
 
@@ -138,8 +127,8 @@ let updateDialog = () => {
         })
         return;
     }
-    Object.keys(WaterQualityStations.value).forEach(key => {
-        WaterQualityStations.value[key] = selection.value[0][key];
+    Object.keys(DynamicInfo.value).forEach(key => {
+        DynamicInfo.value[key] = selection.value[0][key];
     });
     dialogVisible.value = true;
     isUpdate.value = true;
@@ -154,8 +143,8 @@ let update = () => {
             type: 'warning',
         })
         .then(() => {
-            axios.post(baseURL + '/database/update' + 'WaterQualityStations',
-                WaterQualityStations.value,
+            axios.post(baseURL + '/database/update' + 'DynamicInfo',
+                DynamicInfo.value,
                 {
                     headers: {
                         token: localStorage.getItem('token')
@@ -166,8 +155,8 @@ let update = () => {
                         message: '提交请求成功',
                         type: 'success',
                     });
-                    Object.keys(WaterQualityStations.value).forEach(key => {
-                        selection.value[0][key] = WaterQualityStations.value[key];
+                    Object.keys(DynamicInfo.value).forEach(key => {
+                        selection.value[0][key] = DynamicInfo.value[key];
                     });
                     Object.keys(tableData.value[selection.value[0].index]).forEach(key => {
                         tableData.value[selection.value[0].index].key = selection.value[0];
@@ -184,8 +173,8 @@ let insertDialog = () => {
 }
 
 let insert = () => {
-    axios.post(baseURL + '/database/insert' + 'WaterQualityStations',
-        WaterQualityStations.value,
+    axios.post(baseURL + '/database/insert' + 'DynamicInfo',
+        DynamicInfo.value,
         {
             headers: {
                 token: localStorage.getItem('token')
@@ -196,7 +185,7 @@ let insert = () => {
                 message: '提交请求成功',
                 type: 'success',
             });
-            tableData.value.unshift(WaterQualityStations.value);
+            tableData.value.unshift(DynamicInfo.value);
             giveIndex();
             dialogVisible.value = false;
         });
@@ -213,8 +202,8 @@ let leave = () => {
         })
         .then(() => {
             dialogVisible.value = false;
-            Object.keys(WaterQualityStations.value).forEach(key => {
-                WaterQualityStations.value[key] = '';
+            Object.keys(DynamicInfo.value).forEach(key => {
+                DynamicInfo.value[key] = '';
             });
         })
 }

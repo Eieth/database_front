@@ -13,19 +13,16 @@
         v-if="dataFetched" @selection-change="handleSelectionChange">
         <el-table-column label="测站名称" prop="stationName" />
         <el-table-column label="测站编码" prop="stationCode" />
-        <el-table-column label="流域/区域" prop="watershedDistrict" />
-        <el-table-column label="水系" prop="drainageSystem" />
-        <el-table-column label="河流" prop="river" />
-        <el-table-column label="集水面积" prop="square" />
-        <el-table-column label="设站日期" prop="setDate" />
-        <el-table-column label="站类管理" prop="stationManage" />
+        <el-table-column label="站类管理" prop="stationManagementment" />
         <el-table-column label="测站属性" prop="stationFeature" />
-        <el-table-column label="测站地址" prop="stationAddress" />
-        <el-table-column label="经度" prop="longitude" />
-        <el-table-column label="纬度" prop="latitude" />
         <el-table-column label="建设单位" prop="buildUnit" />
-        <el-table-column label="管理单位" prop="manageUnit" />
-        <el-table-column label="所属勘测队" prop="surveyTeam" />
+        <el-table-column label="所属勘测队" prop="surveyTeam" />   
+        <el-table-column label="实测最高水位" prop="actualHighestLevel" />
+        <el-table-column label="实测最高水位时间" prop="actualHighestTime" />
+        <el-table-column label="实测最低水位" prop="actualLowestLevel" />
+        <el-table-column label="实测最低水位时间" prop="actualLowestTime" />
+        <el-table-column label="河干时间" prop="firstDryTime" />
+        <el-table-column label="平均每年河干天数" prop="averageDryDay" />
         <el-table-column label="备注" prop="note" />
     </el-table>
     <el-dialog v-model="deleteDialogVisible" title="删除" width="30%">
@@ -47,44 +44,35 @@
             <el-form-item label="测站编码" prop="stationCode">
                 <el-input v-model="WaterLevelStations.stationCode" />
             </el-form-item>
-            <el-form-item label="流域/区域" prop="watershedDistrict">
-                <el-input v-model="WaterLevelStations.watershedDistrict" />
-            </el-form-item>
-            <el-form-item label="水系" prop="drainageSystem">
-                <el-input v-model="WaterLevelStations.drainageSystem" />
-            </el-form-item>
-            <el-form-item label="河流" prop="river">
-                <el-input v-model="WaterLevelStations.river" />
-            </el-form-item>
-            <el-form-item label="集水面积" prop="square">
-                <el-input v-model="WaterLevelStations.square" />
-            </el-form-item>
-            <el-form-item label="设站日期" prop="setDate">
-                <el-input v-model="WaterLevelStations.setDate" />
-            </el-form-item>
-            <el-form-item label="站类管理" prop="stationManage">
-                <el-input v-model="WaterLevelStations.stationManage" />
+            <el-form-item label="站类管理" prop="stationManagement">
+                <el-input v-model="WaterLevelStations.stationManagement" />
             </el-form-item>
             <el-form-item label="测站属性" prop="stationFeature">
                 <el-input v-model="WaterLevelStations.stationFeature" />
             </el-form-item>
-            <el-form-item label="测站地址" prop="stationAddress">
-                <el-input v-model="WaterLevelStations.stationAddress" />
-            </el-form-item>
-            <el-form-item label="经度" prop="longitude">
-                <el-input v-model="WaterLevelStations.longitude" />
-            </el-form-item>
-            <el-form-item label="纬度" prop="latitude">
-                <el-input v-model="WaterLevelStations.latitude" />
-            </el-form-item>
             <el-form-item label="建设单位" prop="buildUnit">
                 <el-input v-model="WaterLevelStations.buildUnit" />
             </el-form-item>
-            <el-form-item label="管理单位" prop="manageUnit">
-                <el-input v-model="WaterLevelStations.manageUnit" />
-            </el-form-item>
             <el-form-item label="所属勘测队" prop="surveyTeam">
                 <el-input v-model="WaterLevelStations.surveyTeam" />
+            </el-form-item>
+            <el-form-item label="实测最高水位" prop="actualHighestLevel">
+                <el-input v-model="WaterLevelStations.actualHighestLevel" />
+            </el-form-item>
+            <el-form-item label="实测最高水位时间" prop="actualHighestTime">
+                <el-input v-model="WaterLevelStations.actualHighestTime" />
+            </el-form-item>
+            <el-form-item label="实测最低水位" prop="actualLowestLevel">
+                <el-input v-model="WaterLevelStations.actualLowestLevel" />
+            </el-form-item>
+            <el-form-item label="实测最低水位时间" prop="actualLowestTime">
+                <el-input v-model="WaterLevelStations.actualLowestTime" />
+            </el-form-item>
+            <el-form-item label="河干时间" prop="firstDryTime">
+                <el-input v-model="WaterLevelStations.firstDryTime" />
+            </el-form-item>
+            <el-form-item label="平均每年河干天数" prop="averageDryDay">
+                <el-input v-model="WaterLevelStations.averageDryDay" />
             </el-form-item>
             <el-form-item label="备注" prop="note">
                 <el-input v-model="WaterLevelStations.note" />
@@ -116,19 +104,16 @@ let selection = ref([]);
 const WaterLevelStations = ref({
     stationName: '',
     stationCode: '',
-    watershedDistrict: '',
-    drainageSystem: '',
-    river: '',
-    square: '',
-    setDate: '',
-    stationManage: '',
+    stationManagement: '',
     stationFeature: '',
-    stationAddress: '',
-    longitude: '',
-    latitude: '',
     buildUnit: '',
-    manageUnit: '',
     surveyTeam: '',
+    actualHighestLevel: '',
+    actualHighestTime: '',
+    actualLowestLevel: '',
+    actualLowestTime: '',
+    firstDryTime: '',
+    averageDryDay: '',
     note: ''
 })
 
@@ -157,19 +142,16 @@ let filterTableData = computed(() => {
             !search.value ||
             nullObjectHandler(data.stationName).toString().includes(search.value) ||
             nullObjectHandler(data.stationCode).toString().includes(search.value) ||
-            nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
-            nullObjectHandler(data.drainageSystem).toString().includes(search.value) ||
-            nullObjectHandler(data.river).toString().includes(search.value) ||
-            nullObjectHandler(data.square).toString().includes(search.value) ||
-            nullObjectHandler(data.setDate).toString().includes(search.value) ||
-            nullObjectHandler(data.stationManage).toString().includes(search.value) ||
+            nullObjectHandler(data.stationManagement).toString().includes(search.value) ||
             nullObjectHandler(data.stationFeature).toString().includes(search.value) ||
-            nullObjectHandler(data.stationAddress).toString().includes(search.value) ||
-            nullObjectHandler(data.longitude).toString().includes(search.value) ||
-            nullObjectHandler(data.latitude).toString().includes(search.value) ||
             nullObjectHandler(data.buildUnit).toString().includes(search.value) ||
-            nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
             nullObjectHandler(data.surveyTeam).toString().includes(search.value) ||
+            nullObjectHandler(data.actualHighestLevel).toString().includes(search.value) ||
+            nullObjectHandler(data.actualHighestTime).toString().includes(search.value) ||
+            nullObjectHandler(data.actualLowestLevel).toString().includes(search.value) ||
+            nullObjectHandler(data.actualLowestTime).toString().includes(search.value) ||
+            nullObjectHandler(data.firstDryTime).toString().includes(search.value) ||
+            nullObjectHandler(data.averageDryDay).toString().includes(search.value) ||
             nullObjectHandler(data.note).toString().includes(search.value)
 
     )

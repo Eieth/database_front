@@ -14,20 +14,12 @@
         <el-table-column type="selection" />
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
-        <el-table-column label="流域/区域" prop="watershedDistrict" />
-        <el-table-column label="水系" prop="drainageSystem" />
-        <el-table-column label="河流" prop="river" />
-        <el-table-column label="集水面积" prop="square" />
-        <el-table-column label="设站日期" prop="setDate" />
         <el-table-column label="批准机关" prop="approvalAuthority" />
         <el-table-column label="变更情况" prop="changeSituation" />
         <el-table-column label="变更原因" prop="changeReason" />
         <el-table-column label="站类管理" prop="stationManage" />
         <el-table-column label="测站属性" prop="stationFeature" />
-        <el-table-column label="测站地址" prop="stationAddress" />
-        <el-table-column label="经度" prop="longitude" />
-        <el-table-column label="纬度" prop="latitude" />
-        <el-table-column label="管理单位" prop="manageUnit" />
+
         <el-table-column label="备注" prop="note" />
     </el-table>
     <el-dialog v-model="deleteDialogVisible" title="删除" width="30%">
@@ -49,21 +41,6 @@
             <el-form-item label="测站名称" prop="stationName">
                     <el-input v-model="HistoricalChanges.stationName" />
             </el-form-item>
-            <el-form-item label="流域/区域" prop="watershedDistrict">
-                    <el-input v-model="HistoricalChanges.watershedDistrict" />
-            </el-form-item>
-            <el-form-item label="水系" prop="drainageSystem">
-                    <el-input v-model="HistoricalChanges.drainageSystem" />
-            </el-form-item>
-            <el-form-item label="河流" prop="river">
-                    <el-input v-model="HistoricalChanges.river" />
-            </el-form-item>
-            <el-form-item label="集水面积" prop="square">
-                    <el-input v-model="HistoricalChanges.square" />
-            </el-form-item>
-            <el-form-item label="设站日期" prop="setDate">
-                <el-input v-model="HistoricalChanges.setDate" />
-            </el-form-item>
             <el-form-item label="批准机关" prop="approvalAuthority">
                 <el-input v-model="HistoricalChanges.approvalAuthority" />
             </el-form-item>
@@ -78,18 +55,6 @@
             </el-form-item>
             <el-form-item label="测站属性" prop="stationFeature">
                 <el-input v-model="HistoricalChanges.stationFeature" />
-            </el-form-item>
-            <el-form-item label="测站地址" prop="stationAddress">
-                <el-input v-model="HistoricalChanges.stationAddress" />
-            </el-form-item>
-            <el-form-item label="经度" prop="longitude">
-                <el-input v-model="HistoricalChanges.longitude" />
-            </el-form-item>
-            <el-form-item label="纬度" prop="latitude">
-                <el-input v-model="HistoricalChanges.latitude" />
-            </el-form-item>
-            <el-form-item label="管理单位" prop="manageUnit">
-                <el-input v-model="HistoricalChanges.manageUnit" />
             </el-form-item>
             <el-form-item label="备注" prop="note">
                 <el-input v-model="HistoricalChanges.note" />
@@ -121,21 +86,12 @@ let selection = ref([]);
 const HistoricalChanges = ref({
     stationCode: '',
     stationName: '',
-    watershedDistrict: '',
-    drainageSystem: '',
-    river: '',
-    square: '',
-    setDate: '',
     approvalAuthority: '',
     changeSituation: '',
     changeReason: '',
     stationManage: '',
     stationFeature: '',
-    stationAddress: '',
-    longitude: '',
-    latitude: '',
-    manageUnit: '',
-    note: '',
+    note: ''
 })
 
 
@@ -163,20 +119,11 @@ let filterTableData = computed(() => {
             !search.value ||
             nullObjectHandler(data.stationCode).toString().includes(search.value) ||
             nullObjectHandler(data.stationName).toString().includes(search.value) ||
-            nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
-            nullObjectHandler(data.drainageSystem).toString().includes(search.value) ||
-            nullObjectHandler(data.river).toString().includes(search.value) ||
-            nullObjectHandler(data.square).toString().includes(search.value) ||
-            nullObjectHandler(data.setDate).toString().includes(search.value) ||
             nullObjectHandler(data.approvalAuthority).toString().includes(search.value) ||
             nullObjectHandler(data.changeSituation).toString().includes(search.value) ||
             nullObjectHandler(data.changeReason).toString().includes(search.value) ||
             nullObjectHandler(data.stationManage).toString().includes(search.value) ||
             nullObjectHandler(data.stationFeature).toString().includes(search.value) ||
-            nullObjectHandler(data.stationAddress).toString().includes(search.value) ||
-            nullObjectHandler(data.longitude).toString().includes(search.value) ||
-            nullObjectHandler(data.latitude).toString().includes(search.value) ||
-            nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
             nullObjectHandler(data.note).toString().includes(search.value)
 
     )

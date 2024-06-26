@@ -13,9 +13,6 @@
         v-if="dataFetched" @selection-change="handleSelectionChange">
         <el-table-column label="测站名称" prop="stationName" />
         <el-table-column label="测站编码" prop="stationCode" />
-        <el-table-column label="流域/区域" prop="watershedDistrict" />
-        <el-table-column label="水系" prop="drainageSystem" />
-        <el-table-column label="管理单位" prop="manageUnit" />
         <el-table-column label="器口高度" prop="gateHeight" />
         <el-table-column label="多年平均降雨量" prop="averageRainfall" />
         <el-table-column label="实测年最大降雨量" prop="maximumRainfall" />
@@ -42,15 +39,6 @@
             </el-form-item>
             <el-form-item label="测站编码" prop="stationCode">
                 <el-input v-model="RainfallStations.stationCode" />
-            </el-form-item>
-            <el-form-item label="流域/区域" prop="watershedDistrict">
-                <el-input v-model="RainfallStations.watershedDistrict" />
-            </el-form-item>
-            <el-form-item label="水系" prop="drainageSystem">
-                <el-input v-model="RainfallStations.drainageSystem" />
-            </el-form-item>
-            <el-form-item label="管理单位" prop="manageUnit">
-                <el-input v-model="RainfallStations.manageUnit" />
             </el-form-item>
             <el-form-item label="器口高度" prop="gateHeight">
                 <el-input v-model="RainfallStations.gateHeight" />
@@ -94,9 +82,6 @@ let selection = ref([]);
 const RainfallStations = ref({
     stationName: '',
     stationCode: '',
-    watershedDistrict: '',
-    drainageSystem: '',
-    manageUnit: '',
     gateHeight: '',
     averageRainfall: '',
     maximumRainfall: '',
@@ -129,9 +114,6 @@ let filterTableData = computed(() => {
             !search.value ||
             nullObjectHandler(data.stationName).toString().includes(search.value) ||
             nullObjectHandler(data.stationCode).toString().includes(search.value) ||
-            nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
-            nullObjectHandler(data.drainageSystem).toString().includes(search.value) ||
-            nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
             nullObjectHandler(data.gateHeight).toString().includes(search.value) ||
             nullObjectHandler(data.averageRainfall).toString().includes(search.value) ||
             nullObjectHandler(data.maximumRainfall).toString().includes(search.value) ||

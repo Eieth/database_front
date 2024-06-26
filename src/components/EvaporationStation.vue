@@ -14,13 +14,7 @@
         <el-table-column type="selection" />
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
-        <el-table-column label="流域" prop="watershedDistrict" />
-        <el-table-column label="设站日期" prop="setDate" />
-        <el-table-column label="测站地址" prop="stationAddress" />
-        <el-table-column label="管理单位" prop="manageUnit" />
-        <el-table-column label="经度" prop="longitude" />
-        <el-table-column label="纬度" prop="latitude" />
-        <el-table-column label="多年平均蒸发量（mm）" prop="averageEvaporation" />
+        <el-table-column label="多年平均蒸发量" prop="averageEvaporation" />
         <el-table-column label="蒸发器型号" prop="evaporatorModel" />
         <el-table-column label="备注" prop="note" />
     </el-table>
@@ -43,25 +37,7 @@
             <el-form-item label="测站名称" prop="stationName">
                 <el-input v-model="EvaporationStationForm.stationName" />
             </el-form-item>
-            <el-form-item label="流域" prop="watershedDistrict">
-                <el-input v-model="EvaporationStationForm.watershedDistrict" />
-            </el-form-item>
-            <el-form-item label="设站日期" prop="setDate">
-                <el-input v-model="EvaporationStationForm.setDate" />
-            </el-form-item>
-            <el-form-item label="测站地址" prop="stationAddress">
-                <el-input v-model="EvaporationStationForm.stationAddress" />
-            </el-form-item>
-            <el-form-item label="管理单位" prop="manageUnit">
-                <el-input v-model="EvaporationStationForm.manageUnit" />
-            </el-form-item>
-            <el-form-item label="经度" prop="longitude">
-                <el-input v-model="EvaporationStationForm.longitude" />
-            </el-form-item>
-            <el-form-item label="纬度" prop="latitude">
-                <el-input v-model="EvaporationStationForm.latitude" />
-            </el-form-item>
-            <el-form-item label="多年平均蒸发量（mm）" prop="averageEvaporation">
+            <el-form-item label="多年平均蒸发量" prop="averageEvaporation">
                 <el-input v-model="EvaporationStationForm.averageEvaporation" />
             </el-form-item>
             <el-form-item label="蒸发器型号" prop="evaporatorModel">
@@ -97,12 +73,6 @@ let selection = ref([]);
 const EvaporationStationForm = ref({
     stationCode: '',
     stationName: '',
-    watershedDistrict: '',
-    setDate: '',
-    stationAddress: '',
-    manageUnit: '',
-    longitude: '',
-    latitude: '',
     averageEvaporation: '',
     evaporatorModel: '',
     note: '',
@@ -133,12 +103,6 @@ let filterTableData = computed(() => {
             !search.value ||
             nullObjectHandler(data.stationCode).toString().includes(search.value) ||
             nullObjectHandler(data.stationName).toString().includes(search.value) ||
-            nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
-            nullObjectHandler(data.setDate).toString().includes(search.value) ||
-            nullObjectHandler(data.stationAddress).toString().includes(search.value) ||
-            nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
-            nullObjectHandler(data.longitude).toString().includes(search.value) ||
-            nullObjectHandler(data.latitude).toString().includes(search.value) ||
             nullObjectHandler(data.averageEvaporation).toString().includes(search.value) ||
             nullObjectHandler(data.evaporatorModel).toString().includes(search.value) ||
             nullObjectHandler(data.note).toString().includes(search.value)

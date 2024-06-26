@@ -14,6 +14,14 @@
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
         <el-table-column label="测站特征值" prop="stationFeatureCode" />
+        <el-table-column label="流域/区域" prop="watershedDistrict" />
+        <el-table-column label="水系" prop="drainageSystem" />
+        <el-table-column label="河流" prop="river" />
+        <el-table-column label="设站日期" prop="setDate" />
+        <el-table-column label="测站地址" prop="stationAddress" />
+        <el-table-column label="经度" prop="longitude" />
+        <el-table-column label="纬度" prop="latitude" />
+        <el-table-column label="管理单位" prop="manageUnit" />
 
     </el-table>
     <el-dialog v-model="deleteDialogVisible" title="删除" width="30%">
@@ -38,6 +46,31 @@
             <el-form-item label="测站特征值" prop="stationFeatureCode">
                 <el-input v-model="StationBasicInfo.stationFeatureCode" />
             </el-form-item>
+            <el-form-item label="流域/区域" prop="watershedDistrict">
+                    <el-input v-model="StationBasicInfo.watershedDistrict" />
+            </el-form-item>
+            <el-form-item label="水系" prop="drainageSystem">
+                    <el-input v-model="StationBasicInfo.drainageSystem" />
+            </el-form-item>
+            <el-form-item label="河流" prop="river">
+                    <el-input v-model="StationBasicInfo.river" />
+            </el-form-item>
+            <el-form-item label="设站日期" prop="setDate">
+                <el-input v-model="StationBasicInfo.setDate" />
+            </el-form-item>
+            <el-form-item label="测站地址" prop="stationAddress">
+                <el-input v-model="StationBasicInfo.stationAddress" />
+            </el-form-item>
+            <el-form-item label="经度" prop="longitude">
+                <el-input v-model="StationBasicInfo.longitude" />
+            </el-form-item>
+            <el-form-item label="纬度" prop="latitude">
+                <el-input v-model="StationBasicInfo.latitude" />
+            </el-form-item>
+            <el-form-item label="管理单位" prop="manageUnit">
+                <el-input v-model="StationBasicInfo.manageUnit" />
+            </el-form-item>
+
         </el-form>
         <template #footer>
             <span class="dialog-footer">
@@ -65,7 +98,15 @@ let selection = ref([]);
 const StationBasicInfo = ref({
     stationCode: '',
     stationName: '',
-    stationFeatureCode: ''
+    stationFeatureCode: '',
+    watershedDistrict: '',
+    drainageSystem: '',
+    river: '',
+    setDate: '',
+    stationAddress: '',
+    longitude: '',
+    latitude: '',
+    manageUnit: ''
 })
 
 
@@ -93,7 +134,15 @@ let filterTableData = computed(() => {
             !search.value ||
             nullObjectHandler(data.stationCode).toString().includes(search.value) ||
             nullObjectHandler(data.stationName).toString().includes(search.value) ||
-            nullObjectHandler(data.stationFeatureCode).toString().includes(search.value)
+            nullObjectHandler(data.stationFeatureCode).toString().includes(search.value) ||
+            nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
+            nullObjectHandler(data.drainageSystem).toString().includes(search.value) ||
+            nullObjectHandler(data.river).toString().includes(search.value) ||
+            nullObjectHandler(data.setDate).toString().includes(search.value) ||
+            nullObjectHandler(data.stationAddress).toString().includes(search.value) ||
+            nullObjectHandler(data.longitude).toString().includes(search.value) ||
+            nullObjectHandler(data.latitude).toString().includes(search.value) ||
+            nullObjectHandler(data.manageUnit).toString().includes(search.value)
     )
 })
 

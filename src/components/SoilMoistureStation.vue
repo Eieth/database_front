@@ -13,12 +13,6 @@
         v-if="dataFetched" @selection-change="handleSelectionChange">
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
-        <el-table-column label="流域/区域" prop="watershedDistrict" />
-        <el-table-column label="设站日期" prop="setDate" />
-        <el-table-column label="测站地址" prop="stationAddress" />
-        <el-table-column label="管理单位" prop="manageUnit" />
-        <el-table-column label="经度" prop="longitude" />
-        <el-table-column label="纬度" prop="latitude" />
     </el-table>
     <el-dialog v-model="deleteDialogVisible" title="删除" width="30%">
         <span>将删除该行数据，无法恢复，请注意！！！</span>
@@ -38,24 +32,6 @@
             </el-form-item>
             <el-form-item label="测站名称" prop="stationName">
                 <el-input v-model="SoilMoistureStation.stationName" />
-            </el-form-item>
-            <el-form-item label="流域/区域" prop="watershedDistrict">
-                <el-input v-model="SoilMoistureStation.watershedDistrict" />
-            </el-form-item>
-            <el-form-item label="设站日期" prop="setDate">
-                <el-input v-model="SoilMoistureStation.setDate" />
-            </el-form-item>
-            <el-form-item label="测站地址" prop="stationAddress">
-                <el-input v-model="SoilMoistureStation.stationAddress" />
-            </el-form-item>
-            <el-form-item label="管理单位" prop="manageUnit">
-                <el-input v-model="SoilMoistureStation.manageUnit" />
-            </el-form-item>
-            <el-form-item label="经度" prop="longitude">
-                <el-input v-model="SoilMoistureStation.longitude" />
-            </el-form-item>
-            <el-form-item label="纬度" prop="latitude">
-                <el-input v-model="SoilMoistureStation.latitude" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -84,12 +60,6 @@ let selection = ref([]);
 const SoilMoistureStation = ref({
     stationCode: '',
     stationName: '',
-    watershedDistrict: '',
-    setDate: '',
-    stationAddress: '',
-    manageUnit: '',
-    longitude: '',
-    latitude: ''
 
 })
 
@@ -117,13 +87,7 @@ let filterTableData = computed(() => {
         (data) =>
             !search.value ||
             nullObjectHandler(data.stationCode).toString().includes(search.value) ||
-            nullObjectHandler(data.stationName).toString().includes(search.value) ||
-            nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
-            nullObjectHandler(data.setDate).toString().includes(search.value) ||
-            nullObjectHandler(data.stationAddress).toString().includes(search.value) ||
-            nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
-            nullObjectHandler(data.longitude).toString().includes(search.value) ||
-            nullObjectHandler(data.latitude).toString().includes(search.value)
+            nullObjectHandler(data.stationName).toString().includes(search.value) 
     )
 })
 

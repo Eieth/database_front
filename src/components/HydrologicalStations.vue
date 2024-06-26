@@ -13,23 +13,14 @@
         v-if="dataFetched" @selection-change="handleSelectionChange">
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
-        <el-table-column label="流域/区域" prop="watershedDistrict" />
-        <el-table-column label="水系" prop="drainageSystem" />
-        <el-table-column label="河流" prop="river" />
-        <el-table-column label="集水面积" prop="square" />
-        <el-table-column label="设站日期" prop="setDate" />
-        <el-table-column label="站类管理" prop="stationManage" />
+        <el-table-column label="站类管理" prop="stationManagement" />
         <el-table-column label="测站属性" prop="stationFeature" />
         <el-table-column label="测站分类" prop="stationClassify" />
-        <el-table-column label="测站地址" prop="stationAddress" />
-        <el-table-column label="经度" prop="longitude" />
-        <el-table-column label="纬度" prop="latitude" />
         <el-table-column label="测站高程" prop="stationHeight" />
         <el-table-column label="基面名称" prop="baseName" />
         <el-table-column label="所属勘测队" prop="surveyTeam" />
         <el-table-column label="基面修正值" prop="baseAmendment" />
         <el-table-column label="建设单位" prop="buildUnit" />
-        <el-table-column label="管理单位" prop="manageUnit" />
         <el-table-column label="多年平均径流量" prop="averageFlowRate" />
         <el-table-column label="实测最大流量的流量" prop="actualMaximumFlowRate" />
         <el-table-column label="实测最大流量的时间" prop="actualMaximumFlowRateTime" />
@@ -57,22 +48,7 @@
             <el-form-item label="测站名称" prop="stationName">
                 <el-input v-model="HydrologicalStations.stationName" />
             </el-form-item>
-            <el-form-item label="流域/区域" prop="watershedDistrict">
-                <el-input v-model="HydrologicalStations.watershedDistrict" />
-            </el-form-item>
-            <el-form-item label="水系" prop="drainageSystem">
-                <el-input v-model="HydrologicalStations.drainageSystem" />
-            </el-form-item>
-            <el-form-item label="河流" prop="river">
-                <el-input v-model="HydrologicalStations.river" />
-            </el-form-item>
-            <el-form-item label="集水面积" prop="square">
-                <el-input v-model="HydrologicalStations.square" />
-            </el-form-item>
-            <el-form-item label="设站日期" prop="setDate">
-                <el-input v-model="HydrologicalStations.setDate" />
-            </el-form-item>
-            <el-form-item label="站类管理" prop="stationManage">
+            <el-form-item label="站类管理" prop="stationManagement">
                 <el-input v-model="HydrologicalStations.stationManage" />
             </el-form-item>
             <el-form-item label="测站属性" prop="stationFeature">
@@ -80,15 +56,6 @@
             </el-form-item>
             <el-form-item label="测站分类" prop="stationClassify">
                 <el-input v-model="HydrologicalStations.stationClassify" />
-            </el-form-item>
-            <el-form-item label="测站地址" prop="stationAddress">
-                <el-input v-model="HydrologicalStations.stationAddress" />
-            </el-form-item>
-            <el-form-item label="经度" prop="longitude">
-                <el-input v-model="HydrologicalStations.longitude" />
-            </el-form-item>
-            <el-form-item label="纬度" prop="latitude">
-                <el-input v-model="HydrologicalStations.latitude" />
             </el-form-item>
             <el-form-item label="测站高程" prop="stationHeight">
                 <el-input v-model="HydrologicalStations.stationHeight" />
@@ -104,9 +71,6 @@
             </el-form-item>
             <el-form-item label="建设单位" prop="buildUnit">
                 <el-input v-model="HydrologicalStations.buildUnit" />
-            </el-form-item>
-            <el-form-item label="管理单位" prop="manageUnit">
-                <el-input v-model="HydrologicalStations.manageUnit" />
             </el-form-item>
             <el-form-item label="多年平均径流量" prop="averageFlowRate">
                 <el-input v-model="HydrologicalStations.averageFlowRate" />
@@ -154,25 +118,14 @@ let selection = ref([]);
 const HydrologicalStations = ref({
     stationCode: '',
     stationName: '',
-    watershedDistrict: '',
-    drainageSystem: '',
-    river: '',
-    square: '',
-    setDate: '',
-    approvalAuthority: '',
-    changeSituation: '',
-    changeReason: '',
-    stationManage: '',
+    stationManagement: '',
     stationFeature: '',
-    stationAddress: '',
-    longitude: '',
-    latitude: '',
+    stationClassify: '',
     stationHeight: '',
     baseName: '',
+    baseAmendment: '',    
     surveyTeam: '',
-    baseAmendment: '',
     buildUnit: '',
-    manageUnit: '',
     averageFlowRate: '',
     actualMaximumFlowRate: '',
     actualMaximumFlowRateTime: '',
@@ -207,27 +160,14 @@ let filterTableData = computed(() => {
             !search.value ||
             nullObjectHandler(data.stationCode).toString().includes(search.value) ||
             nullObjectHandler(data.stationName).toString().includes(search.value) ||
-            nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
-            nullObjectHandler(data.drainageSystem).toString().includes(search.value) ||
-            nullObjectHandler(data.river).toString().includes(search.value) ||
-            nullObjectHandler(data.square).toString().includes(search.value) ||
-            nullObjectHandler(data.setDate).toString().includes(search.value) ||
-            nullObjectHandler(data.approvalAuthority).toString().includes(search.value) ||
-            nullObjectHandler(data.changeSituation).toString().includes(search.value) ||
-            nullObjectHandler(data.changeReason).toString().includes(search.value) ||
-            nullObjectHandler(data.stationManage).toString().includes(search.value) ||
+            nullObjectHandler(data.stationManagement).toString().includes(search.value) ||
             nullObjectHandler(data.stationFeature).toString().includes(search.value) ||
-            nullObjectHandler(data.stationAddress).toString().includes(search.value) ||
-            nullObjectHandler(data.longitude).toString().includes(search.value) ||
-            nullObjectHandler(data.latitude).toString().includes(search.value) ||
-            nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
-            nullObjectHandler(data.note).toString().includes(search.value) ||
+            nullObjectHandler(data.stationClassify).toString().includes(search.value) ||
             nullObjectHandler(data.stationHeight).toString().includes(search.value) ||
             nullObjectHandler(data.baseName).toString().includes(search.value) ||
             nullObjectHandler(data.surveyTeam).toString().includes(search.value) ||
             nullObjectHandler(data.baseAmendment).toString().includes(search.value) ||
             nullObjectHandler(data.buildUnit).toString().includes(search.value) ||
-            nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
             nullObjectHandler(data.averageFlowRate).toString().includes(search.value) ||
             nullObjectHandler(data.actualMaximumFlowRate).toString().includes(search.value) ||
             nullObjectHandler(data.actualMaximumFlowRateTime).toString().includes(search.value) ||
