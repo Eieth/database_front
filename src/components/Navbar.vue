@@ -1,7 +1,7 @@
 <template>
   <el-row class="tac">
     <el-col>
-      <el-menu default-active="2" class="el-menu-vertical-demo" @select="handleSelect">
+      <el-menu default-active="3" class="el-menu-vertical-demo" @select="handleSelect">
 
         <el-sub-menu index="1">
           <template #title>
@@ -19,6 +19,7 @@
           <el-menu-item index="1-6">水质站表</el-menu-item>
           <el-menu-item index="1-7">墒情站表</el-menu-item>
           <el-menu-item index="1-8">沿革调查表</el-menu-item>
+          <el-menu-item index="1-9">动态信息表</el-menu-item>
 
         </el-sub-menu>
 
@@ -34,7 +35,7 @@
         <el-menu-item index="3">
           <template #title>
             <el-icon>
-              <User />
+              <Message/>
             </el-icon>
             <span>相关信息</span>
           </template>
@@ -48,7 +49,7 @@
 </template>
   
 <script setup>
-import { Coin, User } from '@element-plus/icons-vue'
+import { Coin, User, Message } from '@element-plus/icons-vue'
 import router from '@/router/router';
 let handleSelect = (idx) => {
   if (idx === '1-1') {
@@ -67,6 +68,8 @@ let handleSelect = (idx) => {
     router.push({ name:'SoilMoistureStation'});
   } else if (idx === '1-8') {
     router.push({ name:'HistoricalChanges' });
+  } else if (idx === '1-9') {
+    router.push({ name:'DynamicInfo' });
   } else if (idx === '2') {
     router.push({ name: 'UserControl' });
   } else if (idx === '3') {

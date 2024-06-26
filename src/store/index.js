@@ -3,12 +3,16 @@ import { defineStore } from 'pinia'
 export const useUserStore = defineStore('user', {
     state: () => {
         return {
+            id: '',
             username: '',
-            level:'',
-            isLogin:false
+            level: '',
+            isLogin: false
         }
     },
     getters: {
+        getId(state) {
+            return state.id;
+        },
         getUsername(state) {
             return state.username;
         },
@@ -17,17 +21,6 @@ export const useUserStore = defineStore('user', {
         },
         getLoginStatus(state) {
             return state.isLogin;
-        }
-    },
-    actions: {
-        setUsername(str) {
-            state.username = str;
-        },
-        setLevel(str) {
-            state.level = str;
-        },
-        setLoginStatus(bool) {
-            state.isLogin = bool;
         }
     }
 })

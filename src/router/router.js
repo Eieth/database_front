@@ -12,11 +12,15 @@ import SoilMoistureStation from '@/components/SoilMoistureStation.vue';
 import StationBasicInfo from '@/components/StationBasicInfo.vue';
 import WaterLevelStations from '@/components/WaterLevelStations.vue';
 import WaterQualityStations from '@/components/WaterQualityStations.vue';
+import DynamicInfo from '@/components/DynamicInfo.vue';
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
+            path: '',
+            redirect: '/login'
+        }, {
             path: '/login',
             name: 'Login',
             component: Login,
@@ -33,6 +37,11 @@ const router = createRouter({
                 name: 'Main',
                 component: Main,
                 children: [
+                    {
+                        path: 'dynamicInfo',
+                        name: 'DynamicInfo',
+                        component: DynamicInfo,
+                    },
                     {
                         path: 'stationBasicInfo',
                         name: 'StationBasicInfo',

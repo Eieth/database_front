@@ -15,11 +15,14 @@
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
         <el-table-column label="批准机关" prop="approvalAuthority" />
-        <el-table-column label="变更情况" prop="changeSituation" />
+        <el-table-column label="变更情况" prop="changeSituation">
+            <template #default="scope">
+                <span>{{ getReason(scope.row.changeSituation) }}</span>
+            </template>
+        </el-table-column>
         <el-table-column label="变更原因" prop="changeReason" />
-        <el-table-column label="站类管理" prop="stationManage" />
+        <el-table-column label="站类管理" prop="stationManagement" />
         <el-table-column label="测站属性" prop="stationFeature" />
-
         <el-table-column label="备注" prop="note" />
     </el-table>
     <el-dialog v-model="deleteDialogVisible" title="删除" width="30%">
@@ -39,7 +42,7 @@
                 <el-input v-model="HistoricalChanges.stationCode" />
             </el-form-item>
             <el-form-item label="测站名称" prop="stationName">
-                    <el-input v-model="HistoricalChanges.stationName" />
+                <el-input v-model="HistoricalChanges.stationName" />
             </el-form-item>
             <el-form-item label="批准机关" prop="approvalAuthority">
                 <el-input v-model="HistoricalChanges.approvalAuthority" />
@@ -50,8 +53,8 @@
             <el-form-item label="变更原因" prop="changeReason">
                 <el-input v-model="HistoricalChanges.changeReason" />
             </el-form-item>
-            <el-form-item label="站类管理" prop="stationManage">
-                <el-input v-model="HistoricalChanges.stationManage" />
+            <el-form-item label="站类管理" prop="stationManagement">
+                <el-input v-model="HistoricalChanges.stationManagement" />
             </el-form-item>
             <el-form-item label="测站属性" prop="stationFeature">
                 <el-input v-model="HistoricalChanges.stationFeature" />
@@ -83,13 +86,15 @@ let isUpdate = ref(false);
 let dialogVisible = ref(false)
 let deleteDialogVisible = ref(false)
 let selection = ref([]);
+let situations = ['测站升级', '测站降级', '迁移', '撤销']
+
 const HistoricalChanges = ref({
     stationCode: '',
     stationName: '',
     approvalAuthority: '',
     changeSituation: '',
     changeReason: '',
-    stationManage: '',
+    stationManagement: '',
     stationFeature: '',
     note: ''
 })
@@ -104,6 +109,7 @@ axios.post(baseURL + '/database/get' + 'HistoricalChanges', {}, {
         tableData.value = response.data.data;
         giveIndex();
         dataFetched.value = true;
+
     });
 
 let giveIndex = () => {
@@ -122,17 +128,17 @@ let filterTableData = computed(() => {
             nullObjectHandler(data.approvalAuthority).toString().includes(search.value) ||
             nullObjectHandler(data.changeSituation).toString().includes(search.value) ||
             nullObjectHandler(data.changeReason).toString().includes(search.value) ||
-            nullObjectHandler(data.stationManage).toString().includes(search.value) ||
+            nullObjectHandler(data.stationManagement).toString().includes(search.value) ||
             nullObjectHandler(data.stationFeature).toString().includes(search.value) ||
             nullObjectHandler(data.note).toString().includes(search.value)
 
     )
 })
 
-let nullObjectHandler=(object) => {
+let nullObjectHandler = (object) => {
     if (object === null) {
         return ''
-    } else 
+    } else
         return object
 }
 
@@ -242,5 +248,17 @@ let leave = () => {
 let submit = () => {
     if (isUpdate.value) update()
     else insert()
+}
+
+let getReason = (num) => {
+    if (num == 0) return '无'
+    let res = [];
+    for (let i = 0; i < 4; i++) {
+        if (num ^ 1 < num) {
+            res.unshift(situations[i])
+        }
+        num >>= 1
+    }
+    return res.join(', ')
 }
 </script>

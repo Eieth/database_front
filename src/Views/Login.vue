@@ -68,7 +68,6 @@ onBeforeUnmount(() => {
 })
 
 let action = ref('login');
-
 let username = ref('')
 let password = ref('')
 let password_rept = ref('')
@@ -105,22 +104,33 @@ let submit = () => {
 					password: password.value
 				}).then((res) => {
 					if (res.data.code === 200) {
-
+						userState.isLogin = true;
+						userState.level = res.data.data.level
+						userState.username = username.value
+						userState.id = res.data.data.id
+						localStorage.setItem('token', res.data.data.token);
+						router.push('manage/about')
 					}
 				})
 			}
 		}
 	} else {
-		// axios.post(baseURL + '/user/login', {
-		// 	username: username.value,
-		// 	password: password.value
-		// }).then((res) => {
-		// 	if (res.data.code === 200) {
-
-		// 	}
-		// })
-
-		router.push('manage/about')
+		axios.post(baseURL + '/user/login', {
+			username: username.value,
+			password: password.value
+		}).then((res) => {
+			if (res.data.code === 200) {
+				userState.isLogin = true;
+				userState.level = res.data.data.level
+				userState.username = username.value
+				userState.id = res.data.data.id
+				localStorage.setItem('token', res.data.data.token);
+				router.push('manage/about')
+			} else {
+				ElMessage.error('密码错误或账户不存在！')
+				password.value = ''
+			}
+		})
 	}
 }
 </script>

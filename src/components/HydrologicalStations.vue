@@ -49,7 +49,7 @@
                 <el-input v-model="HydrologicalStations.stationName" />
             </el-form-item>
             <el-form-item label="站类管理" prop="stationManagement">
-                <el-input v-model="HydrologicalStations.stationManage" />
+                <el-input v-model="HydrologicalStations.stationManagement" />
             </el-form-item>
             <el-form-item label="测站属性" prop="stationFeature">
                 <el-input v-model="HydrologicalStations.stationFeature" />
