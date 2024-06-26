@@ -131,20 +131,27 @@ let filterTableData = computed(() => {
     return tableData.value.filter(
         (data) =>
             !search.value ||
-            data.stationCode.toString().includes(search.value) ||
-            data.stationCode.toString().includes(search.value) ||
-            data.stationName.toString().includes(search.value) ||
-            data.watershedDistrict.toString().includes(search.value) ||
-            data.setDate.toString().includes(search.value) ||
-            data.stationAddress.toString().includes(search.value) ||
-            data.manageUnit.toString().includes(search.value) ||
-            data.longitude.toString().includes(search.value) ||
-            data.latitude.toString().includes(search.value) ||
-            data.averageEvaporation.toString().includes(search.value) ||
-            data.evaporatorModel.toString().includes(search.value) ||
-            data.note.toString().includes(search.value)
+            nullObjectHandler(data.stationCode).toString().includes(search.value) ||
+            nullObjectHandler(data.stationCode).toString().includes(search.value) ||
+            nullObjectHandler(data.stationName).toString().includes(search.value) ||
+            nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
+            nullObjectHandler(data.setDate).toString().includes(search.value) ||
+            nullObjectHandler(data.stationAddress).toString().includes(search.value) ||
+            nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
+            nullObjectHandler(data.longitude).toString().includes(search.value) ||
+            nullObjectHandler(data.latitude).toString().includes(search.value) ||
+            nullObjectHandler(data.averageEvaporation).toString().includes(search.value) ||
+            nullObjectHandler(data.evaporatorModel).toString().includes(search.value) ||
+            nullObjectHandler(data.note).toString().includes(search.value)
     )
 })
+
+let nullObjectHandler=(object) => {
+    if (object === null) {
+        return ''
+    } else 
+        return object
+}
 
 let handleSelectionChange = (val) => {
     selection.value = val;
