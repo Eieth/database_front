@@ -7,22 +7,22 @@
     </div>
 
     <div>
-        <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">蒸发站表</p>
+        <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">雨量站表</p>
     </div>
     <el-table :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh" :table-layout="auto"
         v-if="dataFetched" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" />
-        <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
-        <el-table-column label="流域" prop="watershedDistrict" />
-        <el-table-column label="设站日期" prop="setDate" />
-        <el-table-column label="测站地址" prop="stationAddress" />
+        <el-table-column label="测站编码" prop="stationCode" />
+        <el-table-column label="流域/区域" prop="watershedDistrict" />
+        <el-table-column label="水系" prop="drainageSystem" />
         <el-table-column label="管理单位" prop="manageUnit" />
-        <el-table-column label="经度" prop="longitude" />
-        <el-table-column label="纬度" prop="latitude" />
-        <el-table-column label="多年平均蒸发量（mm）" prop="averageEvaporation" />
-        <el-table-column label="蒸发器型号" prop="evaporatorModel" />
+        <el-table-column label="器口高度" prop="gateHeight" />
+        <el-table-column label="多年平均降雨量" prop="averageRainfall" />
+        <el-table-column label="实测年最大降雨量" prop="maximumRainfall" />
+        <el-table-column label="出现年份" prop="appearYear" />
         <el-table-column label="备注" prop="note" />
+
+
     </el-table>
     <el-dialog v-model="deleteDialogVisible" title="删除" width="30%">
         <span>将删除该行数据，无法恢复，请注意！！！</span>
@@ -37,38 +37,35 @@
     </el-dialog>
     <el-dialog v-model="dialogVisible" :title="getTitle()" width="30%" :before-close="leave">
         <el-form>
-            <el-form-item label="测站编码" prop="stationCode">
-                <el-input v-model="EvaporationStationForm.stationCode" />
-            </el-form-item>
             <el-form-item label="测站名称" prop="stationName">
-                <el-input v-model="EvaporationStationForm.stationName" />
+                <el-input v-model="RainfallStations.stationName" />
             </el-form-item>
-            <el-form-item label="流域" prop="watershedDistrict">
-                <el-input v-model="EvaporationStationForm.watershedDistrict" />
+            <el-form-item label="测站编码" prop="stationCode">
+                <el-input v-model="RainfallStations.stationCode" />
             </el-form-item>
-            <el-form-item label="设站日期" prop="setDate">
-                <el-input v-model="EvaporationStationForm.setDate" />
+            <el-form-item label="流域/区域" prop="watershedDistrict">
+                <el-input v-model="RainfallStations.watershedDistrict" />
             </el-form-item>
-            <el-form-item label="测站地址" prop="stationAddress">
-                <el-input v-model="EvaporationStationForm.stationAddress" />
+            <el-form-item label="水系" prop="drainageSystem">
+                <el-input v-model="RainfallStations.drainageSystem" />
             </el-form-item>
             <el-form-item label="管理单位" prop="manageUnit">
-                <el-input v-model="EvaporationStationForm.manageUnit" />
+                <el-input v-model="RainfallStations.manageUnit" />
             </el-form-item>
-            <el-form-item label="经度" prop="longitude">
-                <el-input v-model="EvaporationStationForm.longitude" />
+            <el-form-item label="器口高度" prop="gateHeight">
+                <el-input v-model="RainfallStations.gateHeight" />
             </el-form-item>
-            <el-form-item label="纬度" prop="latitude">
-                <el-input v-model="EvaporationStationForm.latitude" />
+            <el-form-item label="多年平均降雨量" prop="averageRainfall">
+                <el-input v-model="RainfallStations.averageRainfall" />
             </el-form-item>
-            <el-form-item label="多年平均蒸发量（mm）" prop="averageEvaporation">
-                <el-input v-model="EvaporationStationForm.averageEvaporation" />
+            <el-form-item label="实测年最大降雨量" prop="maximumRainfall">
+                <el-input v-model="RainfallStations.maximumRainfall" />
             </el-form-item>
-            <el-form-item label="蒸发器型号" prop="evaporatorModel">
-                <el-input v-model="EvaporationStationForm.evaporatorModel" />
+            <el-form-item label="出现年份" prop="appearYear">
+                <el-input v-model="RainfallStations.appearYear" />
             </el-form-item>
             <el-form-item label="备注" prop="note">
-                <el-input v-model="EvaporationStationForm.note" />
+                <el-input v-model="RainfallStations.note" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -94,22 +91,21 @@ let isUpdate = ref(false);
 let dialogVisible = ref(false)
 let deleteDialogVisible = ref(false)
 let selection = ref([]);
-const EvaporationStationForm = ref({
-    stationCode: '',
+const RainfallStations = ref({
     stationName: '',
+    stationCode: '',
     watershedDistrict: '',
-    setDate: '',
-    stationAddress: '',
+    drainageSystem: '',
     manageUnit: '',
-    longitude: '',
-    latitude: '',
-    averageEvaporation: '',
-    evaporatorModel: '',
-    note: '',
+    gateHeight: '',
+    averageRainfall: '',
+    maximumRainfall: '',
+    appearYear: '',
+    note: ''
 })
 
 
-axios.post(baseURL + '/database/get' + 'EvaporationStation', {}, {
+axios.post(baseURL + '/database/get' + 'RainfallStations', {}, {
     headers: {
         token: localStorage.getItem('token')
     }
@@ -131,16 +127,15 @@ let filterTableData = computed(() => {
     return tableData.value.filter(
         (data) =>
             !search.value ||
-            nullObjectHandler(data.stationCode).toString().includes(search.value) ||
             nullObjectHandler(data.stationName).toString().includes(search.value) ||
+            nullObjectHandler(data.stationCode).toString().includes(search.value) ||
             nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
-            nullObjectHandler(data.setDate).toString().includes(search.value) ||
-            nullObjectHandler(data.stationAddress).toString().includes(search.value) ||
+            nullObjectHandler(data.drainageSystem).toString().includes(search.value) ||
             nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
-            nullObjectHandler(data.longitude).toString().includes(search.value) ||
-            nullObjectHandler(data.latitude).toString().includes(search.value) ||
-            nullObjectHandler(data.averageEvaporation).toString().includes(search.value) ||
-            nullObjectHandler(data.evaporatorModel).toString().includes(search.value) ||
+            nullObjectHandler(data.gateHeight).toString().includes(search.value) ||
+            nullObjectHandler(data.averageRainfall).toString().includes(search.value) ||
+            nullObjectHandler(data.maximumRainfall).toString().includes(search.value) ||
+            nullObjectHandler(data.appearYear).toString().includes(search.value) ||
             nullObjectHandler(data.note).toString().includes(search.value)
     )
 })
@@ -174,8 +169,8 @@ let updateDialog = () => {
         })
         return;
     }
-    Object.keys(EvaporationStationForm.value).forEach(key => {
-        EvaporationStationForm.value[key] = selection.value[0][key];
+    Object.keys(RainfallStations.value).forEach(key => {
+        RainfallStations.value[key] = selection.value[0][key];
     });
     dialogVisible.value = true;
     isUpdate.value = true;
@@ -190,8 +185,8 @@ let update = () => {
             type: 'warning',
         })
         .then(() => {
-            axios.post(baseURL + '/database/update' + 'EvaporationStation',
-                EvaporationStationForm.value,
+            axios.post(baseURL + '/database/update' + 'RainfallStations',
+                RainfallStations.value,
                 {
                     headers: {
                         token: localStorage.getItem('token')
@@ -202,8 +197,8 @@ let update = () => {
                         message: '提交请求成功',
                         type: 'success',
                     });
-                    Object.keys(EvaporationStationForm.value).forEach(key => {
-                        selection.value[0][key] = EvaporationStationForm.value[key];
+                    Object.keys(RainfallStations.value).forEach(key => {
+                        selection.value[0][key] = RainfallStations.value[key];
                     });
                     Object.keys(tableData.value[selection.value[0].index]).forEach(key => {
                         tableData.value[selection.value[0].index].key = selection.value[0];
@@ -220,8 +215,8 @@ let insertDialog = () => {
 }
 
 let insert = () => {
-    axios.post(baseURL + '/database/insert' + 'EvaporationStation',
-        EvaporationStationForm.value,
+    axios.post(baseURL + '/database/insert' + 'RainfallStations',
+        RainfallStations.value,
         {
             headers: {
                 token: localStorage.getItem('token')
@@ -232,7 +227,7 @@ let insert = () => {
                 message: '提交请求成功',
                 type: 'success',
             });
-            tableData.value.unshift(EvaporationStationForm.value);
+            tableData.value.unshift(RainfallStations.value);
             giveIndex();
             dialogVisible.value = false;
         });
@@ -249,8 +244,8 @@ let leave = () => {
         })
         .then(() => {
             dialogVisible.value = false;
-            Object.keys(EvaporationStationForm.value).forEach(key => {
-                EvaporationStationForm.value[key] = '';
+            Object.keys(RainfallStations.value).forEach(key => {
+                RainfallStations.value[key] = '';
             });
         })
 }

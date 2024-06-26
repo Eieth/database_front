@@ -7,21 +7,27 @@
     </div>
 
     <div>
-        <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">蒸发站表</p>
+        <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">沿革调查表</p>
     </div>
     <el-table :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh" :table-layout="auto"
         v-if="dataFetched" @selection-change="handleSelectionChange">
         <el-table-column type="selection" />
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
-        <el-table-column label="流域" prop="watershedDistrict" />
+        <el-table-column label="流域/区域" prop="watershedDistrict" />
+        <el-table-column label="水系" prop="drainageSystem" />
+        <el-table-column label="河流" prop="river" />
+        <el-table-column label="集水面积" prop="square" />
         <el-table-column label="设站日期" prop="setDate" />
+        <el-table-column label="批准机关" prop="approvalAuthority" />
+        <el-table-column label="变更情况" prop="changeSituation" />
+        <el-table-column label="变更原因" prop="changeReason" />
+        <el-table-column label="站类管理" prop="stationManage" />
+        <el-table-column label="测站属性" prop="stationFeature" />
         <el-table-column label="测站地址" prop="stationAddress" />
-        <el-table-column label="管理单位" prop="manageUnit" />
         <el-table-column label="经度" prop="longitude" />
         <el-table-column label="纬度" prop="latitude" />
-        <el-table-column label="多年平均蒸发量（mm）" prop="averageEvaporation" />
-        <el-table-column label="蒸发器型号" prop="evaporatorModel" />
+        <el-table-column label="管理单位" prop="manageUnit" />
         <el-table-column label="备注" prop="note" />
     </el-table>
     <el-dialog v-model="deleteDialogVisible" title="删除" width="30%">
@@ -38,37 +44,55 @@
     <el-dialog v-model="dialogVisible" :title="getTitle()" width="30%" :before-close="leave">
         <el-form>
             <el-form-item label="测站编码" prop="stationCode">
-                <el-input v-model="EvaporationStationForm.stationCode" />
+                <el-input v-model="HistoricalChanges.stationCode" />
             </el-form-item>
             <el-form-item label="测站名称" prop="stationName">
-                <el-input v-model="EvaporationStationForm.stationName" />
+                    <el-input v-model="HistoricalChanges.stationName" />
             </el-form-item>
-            <el-form-item label="流域" prop="watershedDistrict">
-                <el-input v-model="EvaporationStationForm.watershedDistrict" />
+            <el-form-item label="流域/区域" prop="watershedDistrict">
+                    <el-input v-model="HistoricalChanges.watershedDistrict" />
+            </el-form-item>
+            <el-form-item label="水系" prop="drainageSystem">
+                    <el-input v-model="HistoricalChanges.drainageSystem" />
+            </el-form-item>
+            <el-form-item label="河流" prop="river">
+                    <el-input v-model="HistoricalChanges.river" />
+            </el-form-item>
+            <el-form-item label="集水面积" prop="square">
+                    <el-input v-model="HistoricalChanges.square" />
             </el-form-item>
             <el-form-item label="设站日期" prop="setDate">
-                <el-input v-model="EvaporationStationForm.setDate" />
+                <el-input v-model="HistoricalChanges.setDate" />
+            </el-form-item>
+            <el-form-item label="批准机关" prop="approvalAuthority">
+                <el-input v-model="HistoricalChanges.approvalAuthority" />
+            </el-form-item>
+            <el-form-item label="变更情况" prop="changeSituation">
+                <el-input v-model="HistoricalChanges.changeSituation" />
+            </el-form-item>
+            <el-form-item label="变更原因" prop="changeReason">
+                <el-input v-model="HistoricalChanges.changeReason" />
+            </el-form-item>
+            <el-form-item label="站类管理" prop="stationManage">
+                <el-input v-model="HistoricalChanges.stationManage" />
+            </el-form-item>
+            <el-form-item label="测站属性" prop="stationFeature">
+                <el-input v-model="HistoricalChanges.stationFeature" />
             </el-form-item>
             <el-form-item label="测站地址" prop="stationAddress">
-                <el-input v-model="EvaporationStationForm.stationAddress" />
-            </el-form-item>
-            <el-form-item label="管理单位" prop="manageUnit">
-                <el-input v-model="EvaporationStationForm.manageUnit" />
+                <el-input v-model="HistoricalChanges.stationAddress" />
             </el-form-item>
             <el-form-item label="经度" prop="longitude">
-                <el-input v-model="EvaporationStationForm.longitude" />
+                <el-input v-model="HistoricalChanges.longitude" />
             </el-form-item>
             <el-form-item label="纬度" prop="latitude">
-                <el-input v-model="EvaporationStationForm.latitude" />
+                <el-input v-model="HistoricalChanges.latitude" />
             </el-form-item>
-            <el-form-item label="多年平均蒸发量（mm）" prop="averageEvaporation">
-                <el-input v-model="EvaporationStationForm.averageEvaporation" />
-            </el-form-item>
-            <el-form-item label="蒸发器型号" prop="evaporatorModel">
-                <el-input v-model="EvaporationStationForm.evaporatorModel" />
+            <el-form-item label="管理单位" prop="manageUnit">
+                <el-input v-model="HistoricalChanges.manageUnit" />
             </el-form-item>
             <el-form-item label="备注" prop="note">
-                <el-input v-model="EvaporationStationForm.note" />
+                <el-input v-model="HistoricalChanges.note" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -94,22 +118,28 @@ let isUpdate = ref(false);
 let dialogVisible = ref(false)
 let deleteDialogVisible = ref(false)
 let selection = ref([]);
-const EvaporationStationForm = ref({
+const HistoricalChanges = ref({
     stationCode: '',
     stationName: '',
     watershedDistrict: '',
+    drainageSystem: '',
+    river: '',
+    square: '',
     setDate: '',
+    approvalAuthority: '',
+    changeSituation: '',
+    changeReason: '',
+    stationManage: '',
+    stationFeature: '',
     stationAddress: '',
-    manageUnit: '',
     longitude: '',
     latitude: '',
-    averageEvaporation: '',
-    evaporatorModel: '',
+    manageUnit: '',
     note: '',
 })
 
 
-axios.post(baseURL + '/database/get' + 'EvaporationStation', {}, {
+axios.post(baseURL + '/database/get' + 'HistoricalChanges', {}, {
     headers: {
         token: localStorage.getItem('token')
     }
@@ -134,14 +164,21 @@ let filterTableData = computed(() => {
             nullObjectHandler(data.stationCode).toString().includes(search.value) ||
             nullObjectHandler(data.stationName).toString().includes(search.value) ||
             nullObjectHandler(data.watershedDistrict).toString().includes(search.value) ||
+            nullObjectHandler(data.drainageSystem).toString().includes(search.value) ||
+            nullObjectHandler(data.river).toString().includes(search.value) ||
+            nullObjectHandler(data.square).toString().includes(search.value) ||
             nullObjectHandler(data.setDate).toString().includes(search.value) ||
+            nullObjectHandler(data.approvalAuthority).toString().includes(search.value) ||
+            nullObjectHandler(data.changeSituation).toString().includes(search.value) ||
+            nullObjectHandler(data.changeReason).toString().includes(search.value) ||
+            nullObjectHandler(data.stationManage).toString().includes(search.value) ||
+            nullObjectHandler(data.stationFeature).toString().includes(search.value) ||
             nullObjectHandler(data.stationAddress).toString().includes(search.value) ||
-            nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
             nullObjectHandler(data.longitude).toString().includes(search.value) ||
             nullObjectHandler(data.latitude).toString().includes(search.value) ||
-            nullObjectHandler(data.averageEvaporation).toString().includes(search.value) ||
-            nullObjectHandler(data.evaporatorModel).toString().includes(search.value) ||
+            nullObjectHandler(data.manageUnit).toString().includes(search.value) ||
             nullObjectHandler(data.note).toString().includes(search.value)
+
     )
 })
 
@@ -174,8 +211,8 @@ let updateDialog = () => {
         })
         return;
     }
-    Object.keys(EvaporationStationForm.value).forEach(key => {
-        EvaporationStationForm.value[key] = selection.value[0][key];
+    Object.keys(HistoricalChanges.value).forEach(key => {
+        HistoricalChanges.value[key] = selection.value[0][key];
     });
     dialogVisible.value = true;
     isUpdate.value = true;
@@ -190,8 +227,8 @@ let update = () => {
             type: 'warning',
         })
         .then(() => {
-            axios.post(baseURL + '/database/update' + 'EvaporationStation',
-                EvaporationStationForm.value,
+            axios.post(baseURL + '/database/update' + 'HistoricalChanges',
+                HistoricalChanges.value,
                 {
                     headers: {
                         token: localStorage.getItem('token')
@@ -202,8 +239,8 @@ let update = () => {
                         message: '提交请求成功',
                         type: 'success',
                     });
-                    Object.keys(EvaporationStationForm.value).forEach(key => {
-                        selection.value[0][key] = EvaporationStationForm.value[key];
+                    Object.keys(HistoricalChanges.value).forEach(key => {
+                        selection.value[0][key] = HistoricalChanges.value[key];
                     });
                     Object.keys(tableData.value[selection.value[0].index]).forEach(key => {
                         tableData.value[selection.value[0].index].key = selection.value[0];
@@ -220,8 +257,8 @@ let insertDialog = () => {
 }
 
 let insert = () => {
-    axios.post(baseURL + '/database/insert' + 'EvaporationStation',
-        EvaporationStationForm.value,
+    axios.post(baseURL + '/database/insert' + 'HistoricalChanges',
+        HistoricalChanges.value,
         {
             headers: {
                 token: localStorage.getItem('token')
@@ -232,7 +269,7 @@ let insert = () => {
                 message: '提交请求成功',
                 type: 'success',
             });
-            tableData.value.unshift(EvaporationStationForm.value);
+            tableData.value.unshift(HistoricalChanges.value);
             giveIndex();
             dialogVisible.value = false;
         });
@@ -249,8 +286,8 @@ let leave = () => {
         })
         .then(() => {
             dialogVisible.value = false;
-            Object.keys(EvaporationStationForm.value).forEach(key => {
-                EvaporationStationForm.value[key] = '';
+            Object.keys(HistoricalChanges.value).forEach(key => {
+                HistoricalChanges.value[key] = '';
             });
         })
 }
