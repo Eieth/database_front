@@ -123,9 +123,6 @@ let submit = () => {
 		router.push('manage/about')
 	}
 }
-
-
-
 </script>
 
 <style scoped>
