@@ -1,0 +1,256 @@
+<template>
+    <div style="display: flex;">
+        <el-button type="danger" style="margin-left: 3vw;" @click="deleteDialogVisible = true">删除</el-button>
+        <el-button type="primary" style="margin-left: 5vw;" @click="updateDialog">更新</el-button>
+        <el-button type="warning" style="margin-left: 5vw;" @click="insertDialog">插入</el-button>
+        <el-input style="margin-left: 40vw; margin-right: 10vw; " placeholder="搜索框" v-model="search" />
+    </div>
+
+    <div>
+        <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">蒸发站表</p>
+    </div>
+    <el-table :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh" :table-layout="auto"
+        v-if="dataFetched" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" />
+        <el-table-column label="测站编码" prop="stationCode" />
+        <el-table-column label="测站名称" prop="stationName" />
+        <el-table-column label="流域" prop="watershedDistrict" />
+        <el-table-column label="设站日期" prop="setDate" />
+        <el-table-column label="测站地址" prop="stationAddress" />
+        <el-table-column label="管理单位" prop="manageUnit" />
+        <el-table-column label="经度" prop="longitude" />
+        <el-table-column label="纬度" prop="latitude" />
+        <el-table-column label="多年平均蒸发量（mm）" prop="averageEvaporation" />
+        <el-table-column label="蒸发器型号" prop="evaporatorModel" />
+        <el-table-column label="备注" prop="note" />
+    </el-table>
+    <el-dialog v-model="deleteDialogVisible" title="删除" width="30%">
+        <span>将删除该行数据，无法恢复，请注意！！！</span>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="deleteDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="deleteRow">
+                    提交
+                </el-button>
+            </span>
+        </template>
+    </el-dialog>
+    <el-dialog v-model="dialogVisible" :title="getTitle()" width="30%" :before-close="leave">
+        <el-form>
+            <el-form-item label="测站编码" prop="stationCode">
+                <el-input v-model="EvaporationStationForm.stationCode" />
+            </el-form-item>
+            <el-form-item label="测站名称" prop="stationName">
+                <el-input v-model="EvaporationStationForm.stationName" />
+            </el-form-item>
+            <el-form-item label="流域" prop="watershedDistrict">
+                <el-input v-model="EvaporationStationForm.watershedDistrict" />
+            </el-form-item>
+            <el-form-item label="设站日期" prop="setDate">
+                <el-input v-model="EvaporationStationForm.setDate" />
+            </el-form-item>
+            <el-form-item label="测站地址" prop="stationAddress">
+                <el-input v-model="EvaporationStationForm.stationAddress" />
+            </el-form-item>
+            <el-form-item label="管理单位" prop="manageUnit">
+                <el-input v-model="EvaporationStationForm.manageUnit" />
+            </el-form-item>
+            <el-form-item label="经度" prop="longitude">
+                <el-input v-model="EvaporationStationForm.longitude" />
+            </el-form-item>
+            <el-form-item label="纬度" prop="latitude">
+                <el-input v-model="EvaporationStationForm.latitude" />
+            </el-form-item>
+            <el-form-item label="多年平均蒸发量（mm）" prop="averageEvaporation">
+                <el-input v-model="EvaporationStationForm.averageEvaporation" />
+            </el-form-item>
+            <el-form-item label="蒸发器型号" prop="evaporatorModel">
+                <el-input v-model="EvaporationStationForm.evaporatorModel" />
+            </el-form-item>
+            <el-form-item label="备注" prop="note">
+                <el-input v-model="EvaporationStationForm.note" />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="leave">取消</el-button>
+                <el-button type="primary" @click="submit()">
+                    提交
+                </el-button>
+            </span>
+        </template>
+    </el-dialog>
+</template>
+
+<script setup>
+import axios from 'axios';
+import { ref, computed } from 'vue';
+import baseURL from '@/axios';
+import { ElMessage, ElMessageBox } from 'element-plus';
+let dataFetched = ref(false);
+let tableData = ref([]);
+let search = ref('');
+let isUpdate = ref(false);
+let dialogVisible = ref(false)
+let deleteDialogVisible = ref(false)
+let selection = ref([]);
+const EvaporationStationForm = ref({
+    stationCode: '',
+    stationName: '',
+    watershedDistrict: '',
+    setDate: '',
+    stationAddress: '',
+    manageUnit: '',
+    longitude: '',
+    latitude: '',
+    averageEvaporation: '',
+    evaporatorModel: '',
+    note: '',
+})
+
+
+axios.post(baseURL + '/database/get' + 'EvaporationStation', {}, {
+    headers: {
+        token: localStorage.getItem('token')
+    }
+})
+    .then((response) => {
+        tableData.value = response.data.data;
+        giveIndex();
+        dataFetched.value = true;
+    });
+
+let giveIndex = () => {
+    let i = 0;
+    tableData.value.forEach((item) => {
+        item.index = i++;
+    })
+}
+
+let filterTableData = computed(() => {
+    return tableData.value.filter(
+        (data) =>
+            !search.value ||
+            data.stationCode.toString().includes(search.value) ||
+            data.stationCode.toString().includes(search.value) ||
+            data.stationName.toString().includes(search.value) ||
+            data.watershedDistrict.toString().includes(search.value) ||
+            data.setDate.toString().includes(search.value) ||
+            data.stationAddress.toString().includes(search.value) ||
+            data.manageUnit.toString().includes(search.value) ||
+            data.longitude.toString().includes(search.value) ||
+            data.latitude.toString().includes(search.value) ||
+            data.averageEvaporation.toString().includes(search.value) ||
+            data.evaporatorModel.toString().includes(search.value) ||
+            data.note.toString().includes(search.value)
+    )
+})
+
+let handleSelectionChange = (val) => {
+    selection.value = val;
+}
+
+let getTitle = () => {
+    return isUpdate.value ? '更新' : '插入';
+}
+
+let updateDialog = () => {
+    if (selection.value.length === 0) {
+        ElMessage({
+            message: '请选择一行数据',
+            type: 'error',
+        })
+        return;
+    } else if (selection.value.length > 1) {
+        ElMessage({
+            message: '一次只能修改一行数据',
+            type: 'error',
+        })
+        return;
+    }
+    Object.keys(EvaporationStationForm.value).forEach(key => {
+        EvaporationStationForm.value[key] = selection.value[0][key];
+    });
+    dialogVisible.value = true;
+    isUpdate.value = true;
+}
+
+let update = () => {
+    ElMessageBox.confirm('确定本次输入吗？',
+        'Warning',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+        })
+        .then(() => {
+            axios.post(baseURL + '/database/update' + 'EvaporationStation',
+                EvaporationStationForm.value,
+                {
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+                })
+                .then((response) => {
+                    ElMessage({
+                        message: '提交请求成功',
+                        type: 'success',
+                    });
+                    Object.keys(EvaporationStationForm.value).forEach(key => {
+                        selection.value[0][key] = EvaporationStationForm.value[key];
+                    });
+                    Object.keys(tableData.value[selection.value[0].index]).forEach(key => {
+                        tableData.value[selection.value[0].index].key = selection.value[0];
+                    })
+                    dialogVisible.value = false;
+                });
+            dialogVisible.value = false;
+        })
+}
+
+let insertDialog = () => {
+    dialogVisible.value = true;
+    isUpdate.value = false;
+}
+
+let insert = () => {
+    axios.post(baseURL + '/database/insert' + 'EvaporationStation',
+        EvaporationStationForm.value,
+        {
+            headers: {
+                token: localStorage.getItem('token')
+            }
+        })
+        .then((response) => {
+            ElMessage({
+                message: '提交请求成功',
+                type: 'success',
+            });
+            tableData.value.unshift(EvaporationStationForm.value);
+            giveIndex();
+            dialogVisible.value = false;
+        });
+
+}
+
+let leave = () => {
+    ElMessageBox.confirm('退出本次输入吗？',
+        'Warning',
+        {
+            confirmButtonText: '退出',
+            cancelButtonText: '取消',
+            type: 'warning',
+        })
+        .then(() => {
+            dialogVisible.value = false;
+            Object.keys(EvaporationStationForm.value).forEach(key => {
+                EvaporationStationForm.value[key] = '';
+            });
+        })
+}
+
+let submit = () => {
+    if (isUpdate.value) update()
+    else insert()
+}
+</script>

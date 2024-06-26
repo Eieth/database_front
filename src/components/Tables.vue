@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex;">
+  <!-- <div style="display: flex;">
     <el-button type="danger" style="margin-left: 3vw;" @click="deleteDialogVisible = true">删除</el-button>
     <Controller></Controller>
     <el-input style="margin-left: 40vw; margin-right: 10vw; " placeholder="搜索框" v-model="search" />
@@ -18,6 +18,7 @@
   <div>
     <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">{{ getTableName() }}</p>
   </div>
+  
   <el-table :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh" :table-layout="auto"
     v-if="route.query.tables === 'StationOverview' && dataFetched" @selection-change="handleSelectionChange">
     <el-table-column type="selection" />
@@ -119,7 +120,8 @@
     <el-table-column prop="stationType" label="测站类型" />
     <el-table-column prop="averageEvaporation" label="多年平均蒸发量" />
     <el-table-column prop="evaporationInstrumentModel" label="蒸发器型号" />
-  </el-table>
+  </el-table> -->
+  <router-view />
 </template>
 <script setup>
 import axios from 'axios';
