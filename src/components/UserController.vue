@@ -38,9 +38,9 @@
     </el-dialog>
     <el-dialog v-model="levelDialogVisiable" title="修改权限" width="20%">
         <el-radio-group v-model="newLevel" size="large">
-            <el-radio-button label="普通用户" value="0" />
-            <el-radio-button label="管理员" value="1" />
-            <el-radio-button label="超级管理员" value="2" />
+            <el-radio-button label="普通用户" :value="0" />
+            <el-radio-button label="管理员" :value="1" />
+            <el-radio-button label="超级管理员" :value="2" />
         </el-radio-group>
 
         <template #footer>
@@ -113,7 +113,7 @@ let passwordConfrim = () => {
     }
     passwordDialogVisiable.value = false;
     axios.post(baseURL + '/user/resetPassword', {
-        "posterId": 1,
+        "posterId": store.getId,
         "managedId": managedId,
         "newPassword": newPassword.value
     }, {
@@ -142,12 +142,20 @@ let changeLevel = (row) => {
 }
 
 let levelConfrim = () => {
-    if (newLevel.value === oldLevel) return
+    if (newLevel.value === oldLevel) {
+        levelDialogVisiable.value = false;
+        return
+    } 
+    if (managedId === store.getId) {
+        ElMessage.error("不能对本id进行操作")
+        levelDialogVisiable.value = false;
+        return
+    }
 
     axios.post(baseURL + '/user/setLevel', {
-        "posterId": 1,
+        "posterId": store.getId,
         "managedId": managedId,
-        "newLevel": newLevel.value
+        "newLevel": transport(newLevel.value)
     }, {
         headers: {
             token: localStorage.getItem('token')
@@ -155,7 +163,24 @@ let levelConfrim = () => {
     }).then((response) => {
         ElMessage.success("修改成功");
         levelDialogVisiable.value = false;
+        tableData.value.forEach((item) => {
+            if (item.id === managedId) {
+                item.level = transport(newLevel.value.toString());
+                return
+            }
+        })
     })
+}
+
+let transport = (str) => {
+    switch (str) {
+        case '普通用户': return '0';
+        case '管理员': return '1';
+        case '超级管理员': return '2';
+        case '0': return '普通用户';
+        case '1': return '管理员';
+        case '2': return  '超级管理员';
+    }
 }
 
 let deleteUser = (row) => {
@@ -166,10 +191,11 @@ let deleteUser = (row) => {
 let deleteConfrim = () => {
     if (managedId === store.getId) {
         ElMessage.error("不能对本id进行操作")
+        deleteDialogVisiable.value = false;
         return
     }
     axios.post(baseURL + '/user/deleteUser', {
-        "posterId": 1,
+        "posterId": store.getId,
         "managedId": managedId,
     }, {
         headers: {
@@ -178,6 +204,11 @@ let deleteConfrim = () => {
     }).then((response) => {
         ElMessage.success("删除成功");
         deleteDialogVisiable.value = false;
+        for (let i = 0; i < tableData.value.length; i++) {
+            if (tableData.value[i].id === managedId) {
+                tableData.value.splice(i, 1);
+            }
+        }
     })
 }
 

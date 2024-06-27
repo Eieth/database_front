@@ -11,7 +11,7 @@
             <span>数据库内容</span>
           </template>
 
-          <el-menu-item index="1-1">测站一览表</el-menu-item>
+          <el-menu-item index="1-1">测站基本信息表</el-menu-item>
           <el-menu-item index="1-2">水文站表</el-menu-item>
           <el-menu-item index="1-3">水位站表</el-menu-item>
           <el-menu-item index="1-4">雨量站表</el-menu-item>
