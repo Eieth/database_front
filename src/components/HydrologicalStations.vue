@@ -9,7 +9,6 @@
     </div>
     <div style="margin-top: 2vh;" v-else>
         <el-input style="margin-left: 60vw; width: 15vw;" placeholder="搜索框" v-model="search" />
-        <el-button type="primary" style="margin-left: 4vw;" @click="searchProDialog">高级搜索</el-button>
         <el-button type="primary" style="margin-left: 1vw;" @click="searchProDialog">高级搜索</el-button>
         <el-button type="info" style="margin-left: 1vw;" @click="dialogStatus = 0">重置结果</el-button>
     </div>

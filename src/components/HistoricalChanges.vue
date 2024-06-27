@@ -23,6 +23,8 @@
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
         <el-table-column label="批准机关" prop="approvalAuthority" />
+        <el-table-column label="设站时间" prop="setDate" />
+        <el-table-column label="变更时间" prop="changeDate" />
         <el-table-column label="变更情况" prop="changeSituation">
             <template #default="scope">
                 <span>{{ getSituation(scope.row.changeSituation) }}</span>
@@ -55,6 +57,13 @@
             </el-form-item>
             <el-form-item label="批准机关" prop="approvalAuthority">
                 <el-input v-model="HistoricalChanges.approvalAuthority" />
+            </el-form-item>
+
+            <el-form-item label="设站时间" prop="setDate">
+                <el-input v-model="HistoricalChanges.setDate" />
+            </el-form-item>
+            <el-form-item label="变更时间" prop="changeDate">
+                <el-input v-model="HistoricalChanges.changeDate" />
             </el-form-item>
             <el-form-item label="变更情况" prop="changeSituation">
                 <!-- <el-input v-model="HistoricalChanges.changeSituation" /> -->
@@ -121,6 +130,8 @@ const HistoricalChanges = ref({
     id: '',
     stationCode: '',
     stationName: '',
+    setData: '',
+    changeDate: '',
     approvalAuthority: '',
     changeSituation: '',
     changeReason: '',
@@ -346,8 +357,8 @@ let leave = () => {
             checked4.value = false
 
         })
-        dialogStatus.value = 0;
-    
+    dialogStatus.value = 0;
+
 }
 
 let submit = () => {
