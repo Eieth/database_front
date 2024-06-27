@@ -54,10 +54,19 @@
                 <el-input v-model="HistoricalChanges.changeReason" />
             </el-form-item>
             <el-form-item label="站类管理" prop="stationManagement">
-                <el-input v-model="HistoricalChanges.stationManagement" />
+                <el-radio-group v-model="HistoricalChanges.stationFeature">
+                    <el-radio label="基本站" value="基本站"></el-radio>
+                    <el-radio label="专用站" value="专用站"></el-radio>
+                    <el-radio label="试验站" value="试验站"></el-radio>
+                </el-radio-group>
             </el-form-item>
             <el-form-item label="测站属性" prop="stationFeature">
-                <el-input v-model="HistoricalChanges.stationFeature" />
+                <el-radio-group v-model="HistoricalChanges.stationFeature">
+                    <el-radio label="河道站" value="河道站"></el-radio>
+                    <el-radio label="闸坝站/渠道站" value="闸坝站/渠道站"></el-radio>
+                    <el-radio label="水库站" value="水库站"></el-radio>
+                    <el-radio label="潮流站" value="潮流站"></el-radio>
+                </el-radio-group>
             </el-form-item>
             <el-form-item label="备注" prop="note">
                 <el-input v-model="HistoricalChanges.note" />

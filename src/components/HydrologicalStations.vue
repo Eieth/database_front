@@ -49,13 +49,27 @@
                 <el-input v-model="HydrologicalStations.stationName" />
             </el-form-item>
             <el-form-item label="站类管理" prop="stationManagement">
-                <el-input v-model="HydrologicalStations.stationManagement" />
+                <el-radio-group v-model="HydrologicalStations.stationManagement">
+                    <el-radio label="国家重要站" value="国家重要站"></el-radio>
+                    <el-radio label="省级重要站" value="省级重要站"></el-radio>
+                    <el-radio label="一般站" value="一般站"></el-radio>
+                </el-radio-group>
             </el-form-item>
             <el-form-item label="测站属性" prop="stationFeature">
-                <el-input v-model="HydrologicalStations.stationFeature" />
+                <el-radio-group v-model="HydrologicalStations.stationFeature">
+                    <el-radio label="河道站" value="河道站"></el-radio>
+                    <el-radio label="湖泊站" value="湖泊站"></el-radio>
+                    <el-radio label="水库站" value="水库站"></el-radio>
+                    <el-radio label="潮流量站" value="潮流量站"></el-radio>
+                    <el-radio label="渠道" value="渠道"></el-radio>
+                </el-radio-group>
             </el-form-item>
             <el-form-item label="测站分类" prop="stationClassify">
-                <el-input v-model="HydrologicalStations.stationClassify" />
+                <el-radio-group v-model="HydrologicalStations.stationClassify">
+                    <el-radio label="大河控制站" value="大河控制站"></el-radio>
+                    <el-radio label="区域代表站" value="区域代表站"></el-radio>
+                    <el-radio label="小河站" value="小河站"></el-radio>
+                </el-radio-group>
             </el-form-item>
             <el-form-item label="测站高程" prop="stationHeight">
                 <el-input v-model="HydrologicalStations.stationHeight" />
@@ -293,4 +307,6 @@ let submit = () => {
     if (isUpdate.value) update()
     else insert()
 }
+
+  
 </script>

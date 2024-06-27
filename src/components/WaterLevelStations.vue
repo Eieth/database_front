@@ -45,10 +45,21 @@
                 <el-input v-model="WaterLevelStations.stationCode" />
             </el-form-item>
             <el-form-item label="站类管理" prop="stationManagement">
-                <el-input v-model="WaterLevelStations.stationManagement" />
+                <el-radio-group v-model="WaterLevelStations.stationFeature">
+                    <el-radio label="基本站" value="基本站"></el-radio>
+                    <el-radio label="中小河流" value="中小河流"></el-radio>
+                    <el-radio label="山洪灾害" value="山洪灾害"></el-radio>
+                    <el-radio label="其他" value="其他"></el-radio>
+                </el-radio-group>
             </el-form-item>
             <el-form-item label="测站属性" prop="stationFeature">
-                <el-input v-model="WaterLevelStations.stationFeature" />
+                <el-radio-group v-model="WaterLevelStations.stationFeature">
+                    <el-radio label="河道站" value="河道站"></el-radio>
+                    <el-radio label="湖泊站" value="湖泊站"></el-radio>
+                    <el-radio label="水库站" value="水库站"></el-radio>
+                    <el-radio label="潮流量站" value="潮流量站"></el-radio>
+                    <el-radio label="渠道" value="渠道"></el-radio>
+                </el-radio-group>
             </el-form-item>
             <el-form-item label="建设单位" prop="buildUnit">
                 <el-input v-model="WaterLevelStations.buildUnit" />
