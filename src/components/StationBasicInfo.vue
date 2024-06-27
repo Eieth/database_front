@@ -184,7 +184,7 @@ let filterTableData = computed(() => {
                 nullObjectHandler(data.manageUnit).toString().includes(search.value)
         )
     }
-    else {
+    else if (dialogStatus.value === 2) {
         let res = [];
         res = tableData.value;
         Object.keys(StationBasicInfo.value).forEach(key => {
@@ -323,6 +323,7 @@ let leave = () => {
                 StationBasicInfo.value[key] = '';
             });
         })
+    dialogStatus.value = 0;
 }
 
 let submit = () => {
