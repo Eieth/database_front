@@ -4,11 +4,14 @@
         <el-button type="primary" style="margin-left: 5vw;" @click="updateDialog">更新</el-button>
         <el-button type="warning" style="margin-left: 5vw;" @click="insertDialog">插入</el-button>
         <el-input style="margin-left: 40vw; margin-right: 4vw; " placeholder="搜索框" v-model="search" />
-        <el-button type="primary" style="margin-right: 6vw;">高级搜索</el-button>
+        <el-button type="primary" style="margin-left: 1vw;" @click="searchProDialog">高级搜索</el-button>
+        <el-button type="info" style="margin-left: 1vw;" @click="dialogStatus = 0">重置结果</el-button>
     </div>
     <div style="margin-top: 2vh;" v-else>
         <el-input style="margin-left: 60vw; width: 15vw;" placeholder="搜索框" v-model="search" />
-        <el-button type="primary" style="margin-left: 4vw;">高级搜索</el-button>
+        <el-button type="primary" style="margin-left: 4vw;" @click="searchProDialog">高级搜索</el-button>
+        <el-button type="primary" style="margin-left: 1vw;" @click="searchProDialog">高级搜索</el-button>
+        <el-button type="info" style="margin-left: 1vw;" @click="dialogStatus = 0">重置结果</el-button>
     </div>
 
     <div>
@@ -106,7 +109,8 @@ let giveIndex = () => {
 }
 
 let filterTableData = computed(() => {
-    return tableData.value.filter(
+    if (dialogStatus.value === 0) {
+        return tableData.value.filter(
         (data) =>
             !search.value ||
             nullObjectHandler(data.stationName).toString().includes(search.value) ||
@@ -114,7 +118,21 @@ let filterTableData = computed(() => {
             nullObjectHandler(data.sectionName).toString().includes(search.value) ||
             nullObjectHandler(data.primaryZoneName).toString().includes(search.value) ||
             nullObjectHandler(data.secondaryZoneName).toString().includes(search.value)
-    )
+        )
+    }
+    else {
+        let res = [];
+        res = tableData.value;
+        Object.keys(WaterQualityStations.value).forEach(key => {
+            if (nullObjectHandler(WaterQualityStations.value[key]) === '') {
+                return;
+            }
+            res = res.filter((data)=> {
+                return nullObjectHandler(data[key]).toString().includes(WaterQualityStations.value[key]);
+            })
+        });
+        return res;
+    }
 })
 
 let nullObjectHandler=(object) => {
@@ -129,7 +147,11 @@ let handleSelectionChange = (val) => {
 }
 
 let getTitle = () => {
-    return isUpdate.value ? '更新' : '插入';
+    switch (dialogStatus.value) {
+        case 0: return '更新';
+        case 1: return '插入';
+        case 2: return '高级搜索';
+    }
 }
 
 let updateDialog = () => {
@@ -150,7 +172,7 @@ let updateDialog = () => {
         WaterQualityStations.value[key] = selection.value[0][key];
     });
     dialogVisible.value = true;
-    isUpdate.value = true;
+    dialogStatus.value = 0;
 }
 
 let update = () => {
@@ -188,7 +210,7 @@ let update = () => {
 
 let insertDialog = () => {
     dialogVisible.value = true;
-    isUpdate.value = false;
+    dialogStatus.value = 1;
 }
 
 let insert = () => {
@@ -207,8 +229,19 @@ let insert = () => {
             tableData.value.unshift(WaterQualityStations.value);
             giveIndex();
             dialogVisible.value = false;
+            dialogStatus.value === 0
         });
+        dialogVisible.value = false;
+        dialogStatus.value === 0
+}
 
+let searchProDialog = () => {
+    dialogVisible.value = true;
+    dialogStatus.value = 2;
+}
+
+let searchPro = () => {
+    dialogVisible.value = false;
 }
 
 let leave = () => {
@@ -228,7 +261,8 @@ let leave = () => {
 }
 
 let submit = () => {
-    if (isUpdate.value) update()
-    else insert()
+    if (dialogStatus.value === 0) update()
+    else if (dialogStatus.value === 1) insert()
+    else searchPro()
 }
 </script>
