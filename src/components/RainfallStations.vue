@@ -47,16 +47,20 @@
                 <el-input v-model="RainfallStations.stationName" />
             </el-form-item>
             <el-form-item label="测站编码" prop="stationCode">
-                <el-input v-model="RainfallStations.stationCode" />
+                <el-input v-model="RainfallStations.stationCode" @input="validateStationCode" />
+                <div v-if="stationCodeError" style="color: red;">数据不符合规范</div>
             </el-form-item>
-            <el-form-item label="器口高度" prop="gateHeight">
-                <el-input v-model="RainfallStations.gateHeight" />
+            <el-form-item label="器口高度" prop="vesselHeight">
+                <el-input v-model="RainfallStations.vesselHeight" @input="validateVesselHeight" />
+                <div v-if="vesselHeightError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="多年平均降雨量" prop="averageRainfall">
-                <el-input v-model="RainfallStations.averageRainfall" />
+                <el-input v-model="RainfallStations.averageRainfall" @input="validateAverageRainfall" />
+                <div v-if="averageRainfallError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="实测年最大降雨量" prop="maximumRainfall">
-                <el-input v-model="RainfallStations.maximumRainfall" />
+                <el-input v-model="RainfallStations.maximumRainfall" @input="validateMaximumRainfall" />
+                <div v-if="maximumRainfallError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="出现年份" prop="appearYear">
                 <el-input v-model="RainfallStations.appearYear" />
@@ -100,6 +104,58 @@ const RainfallStations = ref({
     note: ''
 })
 
+const stationCodeError = ref(false);
+const vesselHeightError = ref(false);
+const averageRainfallError = ref(false);
+const maximumRainfallError = ref(false);
+
+const validateStationCode = () => {
+    const value = RainfallStations.value.stationCode;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        stationCodeError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为整数
+    const isInteger = /^-?\d+$/.test(value);
+    stationCodeError.value = !isInteger;
+};
+
+const validateVesselHeight = () => {
+    const value = RainfallStations.value.vesselHeight;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        vesselHeightError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    vesselHeightError.value = !isFloat;
+};
+
+const validateAverageRainfall = () => {
+    const value = RainfallStations.value.averageRainfall;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        averageRainfallError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    averageRainfallError.value = !isFloat;
+};
+
+const validateMaximumRainfall = () => {
+    const value = RainfallStations.value.maximumRainfall;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        maximumRainfallError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    maximumRainfallError.value = !isFloat;
+};
 
 axios.post(baseURL + '/database/get' + 'RainfallStations', {}, {
     headers: {

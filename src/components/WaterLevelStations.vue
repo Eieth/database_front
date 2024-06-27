@@ -51,7 +51,8 @@
                 <el-input v-model="WaterLevelStations.stationName" />
             </el-form-item>
             <el-form-item label="测站编码" prop="stationCode">
-                <el-input v-model="WaterLevelStations.stationCode" />
+                <el-input v-model="WaterLevelStations.stationCode" @input="validateStationCode" />
+                <div v-if="stationCodeError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="站类管理" prop="stationManagement">
                 <el-radio-group v-model="WaterLevelStations.stationFeature">
@@ -77,13 +78,15 @@
                 <el-input v-model="WaterLevelStations.surveyTeam" />
             </el-form-item>
             <el-form-item label="实测最高水位" prop="actualHighestLevel">
-                <el-input v-model="WaterLevelStations.actualHighestLevel" />
+                <el-input v-model="WaterLevelStations.actualHighestLevel" @input="validateActualHighestLevel" />
+                <div v-if="actualHighestLevelError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="实测最高水位时间" prop="actualHighestTime">
                 <el-input v-model="WaterLevelStations.actualHighestTime" />
             </el-form-item>
             <el-form-item label="实测最低水位" prop="actualLowestLevel">
-                <el-input v-model="WaterLevelStations.actualLowestLevel" />
+                <el-input v-model="WaterLevelStations.actualLowestLevel" @input="validateActualLowestLevel" />
+                <div v-if="actualLowestLevelError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="实测最低水位时间" prop="actualLowestTime">
                 <el-input v-model="WaterLevelStations.actualLowestTime" />
@@ -92,7 +95,8 @@
                 <el-input v-model="WaterLevelStations.firstDryTime" />
             </el-form-item>
             <el-form-item label="平均每年河干天数" prop="averageDryDay">
-                <el-input v-model="WaterLevelStations.averageDryDay" />
+                <el-input v-model="WaterLevelStations.averageDryDay" @input="validateAverageDryDay" />
+                <div v-if="averageDryDayError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="备注" prop="note">
                 <el-input v-model="WaterLevelStations.note" />
@@ -139,6 +143,58 @@ const WaterLevelStations = ref({
     note: ''
 })
 
+const stationCodeError = ref(false);
+const averageDryDayError = ref(false);
+const actualHighestLevelError = ref(false);
+const actualLowestLevelError = ref(false);
+
+const validateStationCode = () => {
+    const value = WaterLevelStations.value.stationCode;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        stationCodeError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为整数
+    const isInteger = /^-?\d+$/.test(value);
+    stationCodeError.value = !isInteger;
+};
+
+const validateAverageDryDay = () => {
+    const value = WaterLevelStations.value.averageDryDay;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        averageDryDayError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为整数
+    const isInteger = /^-?\d+$/.test(value);
+    averageDryDayError.value = !isInteger;
+};
+
+const validateActualHighestLevel = () => {
+    const value = WaterLevelStations.value.actualHighestLevel;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        actualHighestLevelError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    actualHighestLevelError.value = !isFloat;
+};
+
+const validateActualLowestLevel = () => {
+    const value = WaterLevelStations.value.actualLowestLevel;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        actualLowestLevelError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    actualLowestLevelError.value = !isFloat;
+};
 
 axios.post(baseURL + '/database/get' + 'WaterLevelStations', {}, {
     headers: {

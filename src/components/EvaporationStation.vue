@@ -40,13 +40,15 @@
     <el-dialog v-model="dialogVisible" :title="getTitle()" width="30%" :before-close="leave">
         <el-form>
             <el-form-item label="测站编码" prop="stationCode">
-                <el-input v-model="EvaporationStationForm.stationCode" />
+                <el-input v-model="EvaporationStationForm.stationCode" @input="validateStationCode" />
+                <div v-if="stationCodeError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="测站名称" prop="stationName">
                 <el-input v-model="EvaporationStationForm.stationName" />
             </el-form-item>
             <el-form-item label="多年平均蒸发量" prop="averageEvaporation">
-                <el-input v-model="EvaporationStationForm.averageEvaporation" />
+                <el-input v-model="EvaporationStationForm.averageEvaporation" @input="validateAverageEvaporation" />
+                <div v-if="averageEvaporationError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="蒸发器型号" prop="evaporatorModel">
                 <el-input v-model="EvaporationStationForm.evaporatorModel" />
@@ -88,7 +90,33 @@ const EvaporationStationForm = ref({
     note: '',
 })
 
+const stationCodeError = ref(false);
 
+const validateStationCode = () => {
+    const value = EvaporationStationForm.value.stationCode;
+    // 如果值为空，则不显示错误消息
+    if (value === '') {
+        stationCodeError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为整数
+    const isInteger = /^-?\d+$/.test(value);
+    stationCodeError.value = !isInteger;
+};
+
+const averageEvaporationError = ref(false);
+
+const validateAverageEvaporation = () => {
+    const value = EvaporationStationForm.value.averageEvaporation;
+    // 如果值为空，则不显示错误消息
+    if (value === '') {
+        averageEvaporationError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    averageEvaporationError.value = !isFloat;
+};
 axios.post(baseURL + '/database/get' + 'EvaporationStation', {}, {
     headers: {
         token: localStorage.getItem('token')

@@ -39,7 +39,8 @@
     <el-dialog v-model="dialogVisible" :title="getTitle()" width="30%" :before-close="leave">
         <el-form>
             <el-form-item label="测站编码" prop="stationCode">
-                <el-input v-model="DynamicInfo.stationCode" />
+                <el-input v-model="DynamicInfo.stationCode" @input="validateStationCode" />
+                <div v-if="stationCodeError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="测站名称" prop="stationName">
                     <el-input v-model="DynamicInfo.stationName" />
@@ -79,6 +80,19 @@ const DynamicInfo = ref({
     square: ''
 })
 
+const stationCodeError = ref(false);
+
+const validateStationCode = () => {
+    const value = DynamicInfo.value.stationCode;
+    // 如果值为空，则不显示错误消息
+    if (value === '') {
+        stationCodeError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为整数
+    const isInteger = /^-?\d+$/.test(value);
+    stationCodeError.value = !isInteger;
+};
 
 axios.post(baseURL + '/database/get' + 'DynamicInfo', {}, {
     headers: {

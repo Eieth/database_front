@@ -52,7 +52,8 @@
     <el-dialog v-model="dialogVisible" :title="getTitle()" width="30%" :before-close="leave">
         <el-form>
             <el-form-item label="测站编码" prop="stationCode">
-                <el-input v-model="HydrologicalStations.stationCode" />
+                <el-input v-model="HydrologicalStations.stationCode" @input="validateStationCode" />
+                <div v-if="stationCodeError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="测站名称" prop="stationName">
                 <el-input v-model="HydrologicalStations.stationName" />
@@ -81,7 +82,8 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="测站高程" prop="stationHeight">
-                <el-input v-model="HydrologicalStations.stationHeight" />
+                <el-input v-model="HydrologicalStations.stationHeight" @input="validateStationHeight" />
+                <div v-if="stationHeightError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="基面名称" prop="baseName">
                 <el-input v-model="HydrologicalStations.baseName" />
@@ -90,22 +92,26 @@
                 <el-input v-model="HydrologicalStations.surveyTeam" />
             </el-form-item>
             <el-form-item label="基面修正值" prop="baseAmendment">
-                <el-input v-model="HydrologicalStations.baseAmendment" />
+                <el-input v-model="HydrologicalStations.baseAmendment" @input="validateBaseAmendment" />
+                <div v-if="baseAmendmentError && HydrologicalStations.baseAmendment !== ''" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="建设单位" prop="buildUnit">
                 <el-input v-model="HydrologicalStations.buildUnit" />
             </el-form-item>
             <el-form-item label="多年平均径流量" prop="averageFlowRate">
-                <el-input v-model="HydrologicalStations.averageFlowRate" />
+                <el-input v-model="HydrologicalStations.averageFlowRate" @input="validateAverageFlowRate" />
+                <div v-if="averageFlowRateError && HydrologicalStations.averageFlowRate !== ''" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="实测最大流量的流量" prop="actualMaximumFlowRate">
-                <el-input v-model="HydrologicalStations.actualMaximumFlowRate" />
+                <el-input v-model="HydrologicalStations.actualMaximumFlowRate" @input="validateActualMaximumFlowRate" />
+                <div v-if="actualMaximumFlowRateError && HydrologicalStations.actualMaximumFlowRate !== ''" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="实测最大流量的时间" prop="actualMaximumFlowRateTime">
                 <el-input v-model="HydrologicalStations.actualMaximumFlowRateTime" />
             </el-form-item>
             <el-form-item label="实测最小流量的流量" prop="actualMinimalFlowRate">
-                <el-input v-model="HydrologicalStations.actualMinimalFlowRate" />
+                <el-input v-model="HydrologicalStations.actualMinimalFlowRate" @input="validateActualMinimalFlowRate" />
+                <div v-if="actualMinimalFlowRateError && HydrologicalStations.actualMinimalFlowRate !== ''" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="实测最小流量的时间" prop="actualMinimalFlowRateTime">
                 <el-input v-model="HydrologicalStations.actualMinimalFlowRateTime" />
@@ -159,6 +165,85 @@ const HydrologicalStations = ref({
     note: ''
 
 })
+
+const stationCodeError = ref(false);
+const stationHeightError = ref(false);
+const baseAmendmentError = ref(false);
+const averageFlowRateError = ref(false);
+const actualMaximumFlowRateError = ref(false);
+const actualMinimalFlowRateError = ref(false);
+
+const validateStationCode = () => {
+    const value = HydrologicalStations.value.stationCode;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        stationCodeError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为整数
+    const isInteger = /^-?\d+$/.test(value);
+    stationCodeError.value = !isInteger;
+};
+const validateStationHeight = () => {
+    const value = HydrologicalStations.value.stationHeight;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        stationHeightError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    stationHeightError.value = !isFloat;
+};
+
+const validateBaseAmendment = () => {
+    const value = HydrologicalStations.value.baseAmendment;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        baseAmendmentError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    baseAmendmentError.value = !isFloat;
+};
+
+const validateAverageFlowRate = () => {
+    const value = HydrologicalStations.value.averageFlowRate;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        averageFlowRateError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    averageFlowRateError.value = !isFloat;
+};
+
+const validateActualMaximumFlowRate = () => {
+    const value = HydrologicalStations.value.actualMaximumFlowRate;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        actualMaximumFlowRateError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    actualMaximumFlowRateError.value = !isFloat;
+};
+
+const validateActualMinimalFlowRate = () => {
+    const value = HydrologicalStations.value.actualMinimalFlowRate;
+    // 如果值为空，则不进行校验
+    if (value === '') {
+        actualMinimalFlowRateError.value = false;
+        return;
+    }
+    // 使用正则表达式校验是否为浮点数
+    const isFloat = /^-?\d+(\.\d+)?$/.test(value);
+    actualMinimalFlowRateError.value = !isFloat;
+};
+
 
 
 axios.post(baseURL + '/database/get' + 'HydrologicalStations', {}, {
