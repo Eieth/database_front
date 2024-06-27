@@ -3,7 +3,7 @@
         <el-button type="danger" style="margin-left: 3vw;" @click="deleteDialogVisible = true">删除</el-button>
         <el-button type="primary" style="margin-left: 5vw;" @click="updateDialog">更新</el-button>
         <el-button type="warning" style="margin-left: 5vw;" @click="insertDialog">插入</el-button>
-        <el-input style="margin-left: 40vw; margin-right: 10vw; " placeholder="搜索框" v-model="search" />
+        <el-input style="margin-left: 40vw; margin-right: 4vw; " placeholder="搜索框" v-model="search" />
         <el-button type="primary" style="margin-right: 6vw;">高级搜索</el-button>
     </div>
     <div style="margin-top: 2vh;" v-else>
@@ -53,8 +53,13 @@
                 <el-input v-model="HistoricalChanges.approvalAuthority" />
             </el-form-item>
             <el-form-item label="变更情况" prop="changeSituation">
-                <el-input v-model="HistoricalChanges.changeSituation" />
-                
+                <!-- <el-input v-model="HistoricalChanges.changeSituation" /> -->
+                <div>
+                    <el-checkbox v-model="checked1" label="测站升级" size="large" />
+                    <el-checkbox v-model="checked2" label="测站降级" size="large" />
+                    <el-checkbox v-model="checked3" label="迁移" size="large" />
+                    <el-checkbox v-model="checked4" label="撤销" size="large" />
+                </div>
             </el-form-item>
             <el-form-item label="变更原因" prop="changeReason">
                 <el-input v-model="HistoricalChanges.changeReason" />
@@ -104,8 +109,12 @@ let dialogVisible = ref(false)
 let deleteDialogVisible = ref(false)
 let selection = ref([]);
 let situations = ['测站升级', '测站降级', '迁移', '撤销']
-
+let checked1 = ref(false)
+let checked2 = ref(false)
+let checked3 = ref(false)
+let checked4 = ref(false)
 const HistoricalChanges = ref({
+    id: '',
     stationCode: '',
     stationName: '',
     approvalAuthority: '',
@@ -126,7 +135,7 @@ axios.post(baseURL + '/database/get' + 'HistoricalChanges', {}, {
         tableData.value = response.data.data;
         giveIndex();
         dataFetched.value = true;
-
+        console.log(tableData.value)
     });
 
 let giveIndex = () => {
@@ -184,6 +193,11 @@ let updateDialog = () => {
     Object.keys(HistoricalChanges.value).forEach(key => {
         HistoricalChanges.value[key] = selection.value[0][key];
     });
+    let t = HistoricalChanges.value.changeSituation;
+    checked1.value = ((t ^ 1) < t);
+    checked2.value = ((t ^ 2) < t);
+    checked3.value = ((t ^ 4) < t);
+    checked4.value = ((t ^ 8) < t);
     dialogVisible.value = true;
     isUpdate.value = true;
 }
@@ -197,6 +211,7 @@ let update = () => {
             type: 'warning',
         })
         .then(() => {
+            HistoricalChanges.value.changeSituation = ((1 * checked1.value) + (2 * checked2.value) + (4 * checked3.value) + (8 * checked4.value))
             axios.post(baseURL + '/database/update' + 'HistoricalChanges',
                 HistoricalChanges.value,
                 {
@@ -271,7 +286,7 @@ let getReason = (num) => {
     if (num == 0) return '无'
     let res = [];
     for (let i = 0; i < 4; i++) {
-        if (num ^ 1 < num) {
+        if ((num ^ 1) < num) {
             res.unshift(situations[i])
         }
         num >>= 1

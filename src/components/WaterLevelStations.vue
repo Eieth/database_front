@@ -3,7 +3,7 @@
         <el-button type="danger" style="margin-left: 3vw;" @click="deleteDialogVisible = true">删除</el-button>
         <el-button type="primary" style="margin-left: 5vw;" @click="updateDialog">更新</el-button>
         <el-button type="warning" style="margin-left: 5vw;" @click="insertDialog">插入</el-button>
-        <el-input style="margin-left: 40vw; margin-right: 10vw; " placeholder="搜索框" v-model="search" />
+        <el-input style="margin-left: 40vw; margin-right: 4vw; " placeholder="搜索框" v-model="search" />
         <el-button type="primary" style="margin-right: 6vw;">高级搜索</el-button>
     </div>
     <div style="margin-top: 2vh;" v-else>
