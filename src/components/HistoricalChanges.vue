@@ -260,7 +260,7 @@ let update = () => {
 
 let insertDialog = () => {
     dialogVisible.value = true;
-    isUpdate.value = false;
+    dialogStatus.value = 1;
 }
 
 let insert = () => {
