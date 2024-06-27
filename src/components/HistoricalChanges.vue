@@ -68,7 +68,7 @@
                 <el-input v-model="HistoricalChanges.changeReason" />
             </el-form-item>
             <el-form-item label="站类管理" prop="stationManagement">
-                <el-radio-group v-model="HistoricalChanges.stationFeature">
+                <el-radio-group v-model="HistoricalChanges.stationManagement">
                     <el-radio label="基本站" value="基本站"></el-radio>
                     <el-radio label="专用站" value="专用站"></el-radio>
                     <el-radio label="试验站" value="试验站"></el-radio>
@@ -107,7 +107,7 @@ let store = useUserStore();
 let dataFetched = ref(false);
 let tableData = ref([]);
 let search = ref('');
-let isUpdate = ref(false);
+let dialogStatus = ref(false);
 let dialogVisible = ref(false)
 let deleteDialogVisible = ref(false)
 let selection = ref([]);
@@ -292,6 +292,7 @@ let searchProDialog = () => {
 
 let searchPro = () => {
     dialogVisible.value = false;
+    console.log(HistoricalChanges.value.changeSituation)
 }
 
 let leave = () => {
@@ -308,6 +309,11 @@ let leave = () => {
             Object.keys(HistoricalChanges.value).forEach(key => {
                 HistoricalChanges.value[key] = '';
             });
+            checked1.value = false
+            checked2.value = false
+            checked3.value = false
+            checked4.value = false
+
         })
 }
 

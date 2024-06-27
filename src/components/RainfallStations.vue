@@ -86,7 +86,7 @@ let store = useUserStore();
 let dataFetched = ref(false);
 let tableData = ref([]);
 let search = ref('');
-let isUpdate = ref(false);
+let dialogStatus = ref(false);
 let dialogVisible = ref(false)
 let deleteDialogVisible = ref(false)
 let selection = ref([]);
@@ -160,7 +160,11 @@ let handleSelectionChange = (val) => {
 }
 
 let getTitle = () => {
-    return isUpdate.value ? '更新' : '插入';
+    switch (dialogStatus.value) {
+        case 0: return '更新';
+        case 1: return '插入';
+        case 2: return '高级搜索';
+    }
 }
 
 let updateDialog = () => {
