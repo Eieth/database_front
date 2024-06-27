@@ -1,9 +1,14 @@
 <template>
-    <div style="display: flex;">
+    <div style="display: flex;" v-if="store.getLevel !== 0">
         <el-button type="danger" style="margin-left: 3vw;" @click="deleteDialogVisible = true">删除</el-button>
         <el-button type="primary" style="margin-left: 5vw;" @click="updateDialog">更新</el-button>
         <el-button type="warning" style="margin-left: 5vw;" @click="insertDialog">插入</el-button>
         <el-input style="margin-left: 40vw; margin-right: 10vw; " placeholder="搜索框" v-model="search" />
+        <el-button type="primary" style="margin-right: 6vw;">高级搜索</el-button>
+    </div>
+    <div style="margin-top: 2vh;" v-else>
+        <el-input style="margin-left: 60vw; width: 15vw;" placeholder="搜索框" v-model="search" />
+        <el-button type="primary" style="margin-left: 4vw;">高级搜索</el-button>
     </div>
 
     <div>
@@ -49,6 +54,7 @@
             </el-form-item>
             <el-form-item label="变更情况" prop="changeSituation">
                 <el-input v-model="HistoricalChanges.changeSituation" />
+                
             </el-form-item>
             <el-form-item label="变更原因" prop="changeReason">
                 <el-input v-model="HistoricalChanges.changeReason" />
@@ -79,6 +85,8 @@ import axios from 'axios';
 import { ref, computed } from 'vue';
 import baseURL from '@/axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { useUserStore } from '@/store';
+let store = useUserStore();
 let dataFetched = ref(false);
 let tableData = ref([]);
 let search = ref('');

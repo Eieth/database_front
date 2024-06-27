@@ -1,7 +1,7 @@
 <template>
     <div class="common-layout">
     <el-container>
-      <el-header height="20vh">
+      <el-header height="23vh">
         <Header></Header>
       </el-header>
       <el-container>

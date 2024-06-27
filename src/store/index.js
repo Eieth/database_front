@@ -5,7 +5,7 @@ export const useUserStore = defineStore('user', {
         return {
             id: '',
             username: '',
-            level: '',
+            level: 0,
             isLogin: false
         }
     },
@@ -22,5 +22,8 @@ export const useUserStore = defineStore('user', {
         getLoginStatus(state) {
             return state.isLogin;
         }
+    },
+    persist: {
+        enabled: true
     }
 })

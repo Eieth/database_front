@@ -98,21 +98,6 @@ axios.post(baseURL + '/user/getUsers', {}, {
     tableData.value = response.data.data;
 })
 
-let filterTableData = computed(() => {
-    return tableData.value.filter(
-        (data) =>
-            !search.value ||
-            nullObjectHandler(data.id).toString().includes(search.value) ||
-            nullObjectHandler(data.username).toString().includes(search.value)
-    )
-})
-
-let nullObjectHandler = (object) => {
-    if (object === null) {
-        return ''
-    } else
-        return object
-}
 
 let changePassword = (row) => {
     newPassword.value = ''
@@ -171,7 +156,6 @@ let levelConfrim = () => {
         ElMessage.success("修改成功");
         levelDialogVisiable.value = false;
     })
-
 }
 
 let deleteUser = (row) => {

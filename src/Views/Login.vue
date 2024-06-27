@@ -7,7 +7,7 @@
 			</button>
 
 			<button style="background:transparent;border-width:0px;outline:none;color: #fff;"
-				@click="handleChange('singup')">
+				@click="handleChange('signup')">
 				<h2 :class="(action === 'login') ? 'nonactive' : 'active'" id="signup"> 注册 </h2>
 			</button>
 
@@ -60,7 +60,7 @@ onBeforeMount(() => {
 })
 onMounted(() => {
 	if (userState.getLoginStatus) {
-		router.push('manage/about')
+		router.push('/manage/about')
 	}
 })
 onBeforeUnmount(() => {
@@ -101,7 +101,8 @@ let submit = () => {
 			} else {
 				axios.post(baseURL + '/user/signup', {
 					username: username.value,
-					password: password.value
+					password: password.value,
+					passwordRep: password_rept.value
 				}).then((res) => {
 					if (res.data.code === 200) {
 						userState.isLogin = true;

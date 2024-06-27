@@ -13,6 +13,8 @@ import StationBasicInfo from '@/components/StationBasicInfo.vue';
 import WaterLevelStations from '@/components/WaterLevelStations.vue';
 import WaterQualityStations from '@/components/WaterQualityStations.vue';
 import DynamicInfo from '@/components/DynamicInfo.vue';
+import { useUserStore } from '@/store';
+
 
 const router = createRouter({
     history: createWebHistory(),
@@ -85,6 +87,21 @@ const router = createRouter({
 
     ],
 
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.name !== 'Login') {
+        let store = useUserStore();
+        if (store.getLoginStatus) {
+            next()
+        } else {
+            next({
+                path: '/login'
+            })
+        }
+    } else {
+        next()
+    } 
 })
 
 export default router;

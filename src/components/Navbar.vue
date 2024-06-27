@@ -23,7 +23,7 @@
 
         </el-sub-menu>
 
-        <el-menu-item index="2">
+        <el-menu-item index="2" v-if="store.getLevel === 2">
           <template #title>
             <el-icon>
               <User />
@@ -51,6 +51,8 @@
 <script setup>
 import { Coin, User, Message } from '@element-plus/icons-vue'
 import router from '@/router/router';
+import { useUserStore } from '@/store';
+let store = useUserStore();
 let handleSelect = (idx) => {
   if (idx === '1-1') {
     router.push({ name:'StationBasicInfo'});

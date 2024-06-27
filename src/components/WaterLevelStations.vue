@@ -1,9 +1,14 @@
 <template>
-    <div style="display: flex;">
+    <div style="display: flex;" v-if="store.getLevel !== 0">
         <el-button type="danger" style="margin-left: 3vw;" @click="deleteDialogVisible = true">删除</el-button>
         <el-button type="primary" style="margin-left: 5vw;" @click="updateDialog">更新</el-button>
         <el-button type="warning" style="margin-left: 5vw;" @click="insertDialog">插入</el-button>
         <el-input style="margin-left: 40vw; margin-right: 10vw; " placeholder="搜索框" v-model="search" />
+        <el-button type="primary" style="margin-right: 6vw;">高级搜索</el-button>
+    </div>
+    <div style="margin-top: 2vh;" v-else>
+        <el-input style="margin-left: 60vw; width: 15vw;" placeholder="搜索框" v-model="search" />
+        <el-button type="primary" style="margin-left: 4vw;">高级搜索</el-button>
     </div>
 
     <div>
@@ -11,9 +16,10 @@
     </div>
     <el-table :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh" :table-layout="auto"
         v-if="dataFetched" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" />
         <el-table-column label="测站名称" prop="stationName" />
         <el-table-column label="测站编码" prop="stationCode" />
-        <el-table-column label="站类管理" prop="stationManagementment" />
+        <el-table-column label="站类管理" prop="stationManagement" />
         <el-table-column label="测站属性" prop="stationFeature" />
         <el-table-column label="建设单位" prop="buildUnit" />
         <el-table-column label="所属勘测队" prop="surveyTeam" />   
@@ -94,6 +100,8 @@ import axios from 'axios';
 import { ref, computed } from 'vue';
 import baseURL from '@/axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { useUserStore } from '@/store';
+let store = useUserStore();
 let dataFetched = ref(false);
 let tableData = ref([]);
 let search = ref('');
