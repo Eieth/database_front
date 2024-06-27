@@ -258,6 +258,8 @@ let leave = () => {
                 WaterQualityStations.value[key] = '';
             });
         })
+        dialogStatus.value = 0;
+    
 }
 
 let submit = () => {

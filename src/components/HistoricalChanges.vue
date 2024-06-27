@@ -331,6 +331,8 @@ let leave = () => {
             checked4.value = false
 
         })
+        dialogStatus.value = 0;
+    
 }
 
 let submit = () => {

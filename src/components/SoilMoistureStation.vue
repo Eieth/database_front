@@ -240,6 +240,8 @@ let leave = () => {
                 SoilMoistureStation.value[key] = '';
             });
         })
+    dialogStatus.value = 0;
+
 }
 
 let submit = () => {

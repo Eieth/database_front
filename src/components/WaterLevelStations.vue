@@ -317,6 +317,8 @@ let leave = () => {
                 WaterLevelStations.value[key] = '';
             });
         })
+    dialogStatus.value = 0;
+
 }
 
 let submit = () => {
