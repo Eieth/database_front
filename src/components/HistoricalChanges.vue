@@ -18,14 +18,14 @@
         <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">沿革调查表</p>
     </div>
     <el-table :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh" :table-layout="auto"
-        v-if="dataFetched" @selection-change="handleSelectionChange">
+        v-loading="!dataFetched" @selection-change="handleSelectionChange">
         <el-table-column type="selection" />
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
         <el-table-column label="批准机关" prop="approvalAuthority" />
         <el-table-column label="变更情况" prop="changeSituation">
             <template #default="scope">
-                <span>{{ getReason(scope.row.changeSituation) }}</span>
+                <span>{{ getSituation(scope.row.changeSituation) }}</span>
             </template>
         </el-table-column>
         <el-table-column label="变更原因" prop="changeReason" />
@@ -58,10 +58,10 @@
             <el-form-item label="变更情况" prop="changeSituation">
                 <!-- <el-input v-model="HistoricalChanges.changeSituation" /> -->
                 <div>
-                    <el-checkbox v-model="checked1" label="测站升级" size="large" />
-                    <el-checkbox v-model="checked2" label="测站降级" size="large" />
-                    <el-checkbox v-model="checked3" label="迁移" size="large" />
-                    <el-checkbox v-model="checked4" label="撤销" size="large" />
+                    <el-checkbox v-model="checked1" label="测站升级" size="large" :change="checkBoxChange()" />
+                    <el-checkbox v-model="checked2" label="测站降级" size="large" :change="checkBoxChange()" />
+                    <el-checkbox v-model="checked3" label="迁移" size="large" :change="checkBoxChange()" />
+                    <el-checkbox v-model="checked4" label="撤销" size="large" :change="checkBoxChange()" />
                 </div>
             </el-form-item>
             <el-form-item label="变更原因" prop="changeReason">
@@ -127,6 +127,14 @@ const HistoricalChanges = ref({
     stationFeature: '',
     note: ''
 })
+let changeSituationNum = 0;
+
+const rules = ref({
+    stationCode: [
+        { required: true, message: '请输入用户名', trigger: 'blur' },
+        { min: 5, max: 10, message: '用户名必须是 5-10位 的字符', trigger: 'blur' }
+    ]
+})
 
 
 axios.post(baseURL + '/database/get' + 'HistoricalChanges', {}, {
@@ -136,9 +144,8 @@ axios.post(baseURL + '/database/get' + 'HistoricalChanges', {}, {
 })
     .then((response) => {
         tableData.value = response.data.data;
+        dataFetched.value = true
         giveIndex();
-        dataFetched.value = true;
-        //console.log(tableData.value)
     });
 
 let giveIndex = () => {
@@ -151,27 +158,27 @@ let giveIndex = () => {
 let filterTableData = computed(() => {
     if (dialogStatus.value === 0) {
         return tableData.value.filter(
-        (data) =>
-            !search.value ||
-            nullObjectHandler(data.stationCode).toString().includes(search.value) ||
-            nullObjectHandler(data.stationName).toString().includes(search.value) ||
-            nullObjectHandler(data.approvalAuthority).toString().includes(search.value) ||
-            nullObjectHandler(data.changeSituation).toString().includes(search.value) ||
-            nullObjectHandler(data.changeReason).toString().includes(search.value) ||
-            nullObjectHandler(data.stationManagement).toString().includes(search.value) ||
-            nullObjectHandler(data.stationFeature).toString().includes(search.value) ||
-            nullObjectHandler(data.note).toString().includes(search.value)
-
+            (data) =>
+                !search.value ||
+                nullObjectHandler(data.stationCode).toString().includes(search.value) ||
+                nullObjectHandler(data.stationName).toString().includes(search.value) ||
+                nullObjectHandler(data.approvalAuthority).toString().includes(search.value) ||
+                nullObjectHandler(data.changeSituation).toString().includes(search.value) ||
+                nullObjectHandler(data.changeReason).toString().includes(search.value) ||
+                nullObjectHandler(data.stationManagement).toString().includes(search.value) ||
+                nullObjectHandler(data.stationFeature).toString().includes(search.value) ||
+                nullObjectHandler(data.note).toString().includes(search.value)
         )
     }
-    else{
+    else {
         let res = [];
         res = tableData.value;
         Object.keys(HistoricalChanges.value).forEach(key => {
             if (nullObjectHandler(HistoricalChanges.value[key]) === '') {
                 return;
             }
-            res = res.filter((data)=> {
+            res = res.filter((data) => {
+                if (key === 'changeSituation') return situationHandler(data.changeSituation, changeSituationNum)
                 return nullObjectHandler(data[key]).toString().includes(HistoricalChanges.value[key]);
             })
         });
@@ -184,6 +191,15 @@ let nullObjectHandler = (object) => {
         return ''
     } else
         return object
+}
+
+let situationHandler = (num1, num2) => {
+    return (((num1 & num2) ^ num2) === 0)
+}
+
+let checkBoxChange = (num) => {
+    changeSituationNum = ((1 * checked1.value) + (2 * checked2.value) + (4 * checked3.value) + (8 * checked4.value));
+    HistoricalChanges.value.changeSituation = changeSituationNum;
 }
 
 let handleSelectionChange = (val) => {
@@ -281,8 +297,8 @@ let insert = () => {
             dialogVisible.value = false;
             dialogStatus.value === 0
         });
-        dialogVisible.value = false;
-        dialogStatus.value === 0
+    dialogVisible.value = false;
+    dialogStatus.value === 0
 }
 
 let searchProDialog = () => {
@@ -323,7 +339,7 @@ let submit = () => {
     else searchPro()
 }
 
-let getReason = (num) => {
+let getSituation = (num) => {
     if (num == 0) return '无'
     let res = [];
     for (let i = 0; i < 4; i++) {

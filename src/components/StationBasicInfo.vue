@@ -17,8 +17,7 @@
     <div>
         <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">测站基本信息表</p>
     </div>
-    <el-table :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh" :table-layout="auto"
-        v-if="dataFetched" @selection-change="handleSelectionChange">
+    <el-table v-loading="!dataFetched" :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh" :table-layout="auto" @selection-change="handleSelectionChange">
         <el-table-column type="selection" />
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />

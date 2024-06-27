@@ -1,3 +1,3 @@
-const baseURL = 'http://localhost:8088/api'
+const baseURL = 'http://121.41.32.117:8088/api'
 
 export default baseURL;
