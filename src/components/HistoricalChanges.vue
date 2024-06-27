@@ -108,7 +108,7 @@ let store = useUserStore();
 let dataFetched = ref(false);
 let tableData = ref([]);
 let search = ref('');
-let dialogStatus = ref(false);
+let dialogStatus = ref(0);
 let dialogVisible = ref(false)
 let deleteDialogVisible = ref(false)
 let selection = ref([]);
@@ -185,7 +185,7 @@ let filterTableData = computed(() => {
                 nullObjectHandler(data.note).toString().includes(search.value)
         )
     }
-    else {
+    else if (dialogStatus.value === 2) {
         let res = [];
         res = tableData.value;
         Object.keys(HistoricalChanges.value).forEach(key => {
