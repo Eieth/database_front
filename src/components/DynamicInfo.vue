@@ -134,6 +134,7 @@ let filterTableData = computed(() => {
         });
         return res;
     }
+    else return tableData.value
 })
 
 let nullObjectHandler=(object) => {
@@ -243,6 +244,30 @@ let searchProDialog = () => {
 
 let searchPro = () => {
     dialogVisible.value = false;
+}
+
+let deleteRow = () => {
+
+axios.post(baseURL + '/database/delete' + 'DynamicInfo',
+    {
+        stationCode: selection.value[0].stationCode
+    },
+    {
+        headers: {
+            token: localStorage.getItem('token')
+        }
+    })
+    .then((response) => {
+        ElMessage({
+            message: '提交请求成功',
+            type: 'success',
+        });
+        selection.value.forEach((value) => {
+            tableData.value.splice(value.index, 1);
+            giveIndex();
+        })
+        deleteDialogVisible.value = false;
+    });
 }
 
 let leave = () => {

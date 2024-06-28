@@ -24,7 +24,7 @@
         <el-table-column label="站类管理" prop="stationManagement" />
         <el-table-column label="测站属性" prop="stationFeature" />
         <el-table-column label="建设单位" prop="buildUnit" />
-        <el-table-column label="所属勘测队" prop="surveyTeam" />   
+        <el-table-column label="所属勘测队" prop="surveyTeam" />
         <el-table-column label="实测最高水位" prop="actualHighestLevel" />
         <el-table-column label="实测最高水位时间" prop="actualHighestTime" />
         <el-table-column label="实测最低水位" prop="actualLowestLevel" />
@@ -54,7 +54,7 @@
                 <div v-if="stationCodeError" style="color: red;">数据不符合规范</div>
             </el-form-item>
             <el-form-item label="站类管理" prop="stationManagement">
-                <el-radio-group v-model="WaterLevelStations.stationFeature">
+                <el-radio-group v-model="WaterLevelStations.stationManagement">
                     <el-radio label="基本站" value="基本站"></el-radio>
                     <el-radio label="中小河流" value="中小河流"></el-radio>
                     <el-radio label="山洪灾害" value="山洪灾害"></el-radio>
@@ -195,6 +195,65 @@ const validateActualLowestLevel = () => {
     actualLowestLevelError.value = !isFloat;
 };
 
+// const deleteRow=()=>{
+//     ElMessageBox.confirm('确定删除吗？',
+//         'Warning',
+//         {
+//             confirmButtonText: '确定',
+//             cancelButtonText: '取消',
+//             type: 'warning',
+//         })
+//         .then(() => {
+//             axios.post(baseURL + '/database/delete' + 'WaterLevelStations',
+//                 {
+//                     stationCode:selection.value[0].stationCode
+//                 },
+//                 {
+//                     headers: {
+//                         token: localStorage.getItem('token')
+//                     }
+//                 })
+//                 .then((response) => {
+//                     ElMessage({
+//                         message: '提交请求成功',
+//                         type: 'success',
+//                     });
+//                     Object.keys(WaterLevelStations.value).forEach(key => {
+//                         selection.value[0][key] = '';
+//                     });
+//                     Object.keys(tableData.value[selection.value[0].index]).forEach(key => {
+//                         tableData.value[selection.value[0].index].key = '';
+//                     })
+//                     dialogVisible.value = false;
+//                 });
+//             dialogVisible.value = false;
+//         })
+// }
+
+let deleteRow = () => {
+
+    axios.post(baseURL + '/database/delete' + 'WaterLevelStations',
+        {
+            stationCode: selection.value[0].stationCode
+        },
+        {
+            headers: {
+                token: localStorage.getItem('token')
+            }
+        })
+        .then((response) => {
+            ElMessage({
+                message: '提交请求成功',
+                type: 'success',
+            });
+            selection.value.forEach((value) => {
+                tableData.value.splice(value.index, 1);
+                giveIndex();
+            })
+            deleteDialogVisible.value = false;
+        });
+}
+
 axios.post(baseURL + '/database/get' + 'WaterLevelStations', {}, {
     headers: {
         token: localStorage.getItem('token')
@@ -216,21 +275,21 @@ let giveIndex = () => {
 let filterTableData = computed(() => {
     if (dialogStatus.value === 0) {
         return tableData.value.filter(
-        (data) =>
-            !search.value ||
-            nullObjectHandler(data.stationName).toString().includes(search.value) ||
-            nullObjectHandler(data.stationCode).toString().includes(search.value) ||
-            nullObjectHandler(data.stationManagement).toString().includes(search.value) ||
-            nullObjectHandler(data.stationFeature).toString().includes(search.value) ||
-            nullObjectHandler(data.buildUnit).toString().includes(search.value) ||
-            nullObjectHandler(data.surveyTeam).toString().includes(search.value) ||
-            nullObjectHandler(data.actualHighestLevel).toString().includes(search.value) ||
-            nullObjectHandler(data.actualHighestTime).toString().includes(search.value) ||
-            nullObjectHandler(data.actualLowestLevel).toString().includes(search.value) ||
-            nullObjectHandler(data.actualLowestTime).toString().includes(search.value) ||
-            nullObjectHandler(data.firstDryTime).toString().includes(search.value) ||
-            nullObjectHandler(data.averageDryDay).toString().includes(search.value) ||
-            nullObjectHandler(data.note).toString().includes(search.value)
+            (data) =>
+                !search.value ||
+                nullObjectHandler(data.stationName).toString().includes(search.value) ||
+                nullObjectHandler(data.stationCode).toString().includes(search.value) ||
+                nullObjectHandler(data.stationManagement).toString().includes(search.value) ||
+                nullObjectHandler(data.stationFeature).toString().includes(search.value) ||
+                nullObjectHandler(data.buildUnit).toString().includes(search.value) ||
+                nullObjectHandler(data.surveyTeam).toString().includes(search.value) ||
+                nullObjectHandler(data.actualHighestLevel).toString().includes(search.value) ||
+                nullObjectHandler(data.actualHighestTime).toString().includes(search.value) ||
+                nullObjectHandler(data.actualLowestLevel).toString().includes(search.value) ||
+                nullObjectHandler(data.actualLowestTime).toString().includes(search.value) ||
+                nullObjectHandler(data.firstDryTime).toString().includes(search.value) ||
+                nullObjectHandler(data.averageDryDay).toString().includes(search.value) ||
+                nullObjectHandler(data.note).toString().includes(search.value)
         )
     }
     else if (dialogStatus.value === 2) {
@@ -240,18 +299,19 @@ let filterTableData = computed(() => {
             if (nullObjectHandler(WaterLevelStations.value[key]) === '') {
                 return;
             }
-            res = res.filter((data)=> {
+            res = res.filter((data) => {
                 return nullObjectHandler(data[key]).toString().includes(WaterLevelStations.value[key]);
             })
         });
         return res;
     }
+    else return tableData.value
 })
 
-let nullObjectHandler=(object) => {
+let nullObjectHandler = (object) => {
     if (object === null) {
         return ''
-    } else 
+    } else
         return object
 }
 
@@ -345,8 +405,8 @@ let insert = () => {
             dialogVisible.value = false;
             dialogStatus.value === 0
         });
-        dialogVisible.value = false;
-        dialogStatus.value === 0
+    dialogVisible.value = false;
+    dialogStatus.value === 0
 }
 
 let searchProDialog = () => {

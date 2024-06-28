@@ -16,7 +16,8 @@
     <div>
         <p style="margin-bottom: 2%; text-align: center; font-size: 30px; margin-top: -4vh;">测站基本信息表</p>
     </div>
-    <el-table v-loading="!dataFetched" :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh" :table-layout="auto" @selection-change="handleSelectionChange">
+    <el-table v-loading="!dataFetched" :data="filterTableData" stripe style="width: 100%" :border="true" height="57vh"
+        :table-layout="auto" @selection-change="handleSelectionChange">
         <el-table-column type="selection" />
         <el-table-column label="测站编码" prop="stationCode" />
         <el-table-column label="测站名称" prop="stationName" />
@@ -190,12 +191,13 @@ let filterTableData = computed(() => {
             if (nullObjectHandler(StationBasicInfo.value[key]) === '') {
                 return;
             }
-            res = res.filter((data)=> {
+            res = res.filter((data) => {
                 return nullObjectHandler(data[key]).toString().includes(StationBasicInfo.value[key]);
             })
         });
         return res;
     }
+    else return tableData.value
 })
 
 let nullObjectHandler = (object) => {
@@ -323,6 +325,30 @@ let leave = () => {
             });
         })
     dialogStatus.value = 0;
+}
+
+let deleteRow = () => {
+
+    axios.post(baseURL + '/database/delete' + 'StationBasicInfo',
+        {
+            stationCode: selection.value[0].stationCode
+        },
+        {
+            headers: {
+                token: localStorage.getItem('token')
+            }
+        })
+        .then((response) => {
+            ElMessage({
+                message: '提交请求成功',
+                type: 'success',
+            });
+            selection.value.forEach((value) => {
+                tableData.value.splice(value.index, 1);
+                giveIndex();
+            })
+            deleteDialogVisible.value = false;
+        });
 }
 
 let submit = () => {

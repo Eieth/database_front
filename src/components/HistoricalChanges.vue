@@ -161,6 +161,29 @@ const rules = ref({
     ]
 })
 
+let deleteRow = () => {
+
+axios.post(baseURL + '/database/delete' + 'HistoricalChanges',
+    {
+        stationCode: selection.value[0].stationCode
+    },
+    {
+        headers: {
+            token: localStorage.getItem('token')
+        }
+    })
+    .then((response) => {
+        ElMessage({
+            message: '提交请求成功',
+            type: 'success',
+        });
+        selection.value.forEach((value) => {
+            tableData.value.splice(value.index, 1);
+            giveIndex();
+        })
+        deleteDialogVisible.value = false;
+    });
+}
 
 axios.post(baseURL + '/database/get' + 'HistoricalChanges', {}, {
     headers: {
@@ -209,6 +232,8 @@ let filterTableData = computed(() => {
         });
         return res;
     }
+    else return tableData.value
+
 })
 
 let nullObjectHandler = (object) => {
